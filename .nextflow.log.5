@@ -1,0 +1,116 @@
+Aug-24 15:50:42.230 [main] DEBUG nextflow.cli.Launcher - $> /usr/local/bin/nextflow run main.nf
+Aug-24 15:50:46.826 [main] INFO  nextflow.cli.CmdRun - N E X T F L O W  ~  version 0.23.3
+Aug-24 15:50:47.113 [main] INFO  nextflow.cli.CmdRun - Launching `main.nf` [sad_einstein] - revision: 85d07741ec
+Aug-24 15:50:47.738 [main] DEBUG nextflow.Session - Session uuid: 5366a4d7-8a78-4f91-8ad7-890967e5db36
+Aug-24 15:50:47.738 [main] DEBUG nextflow.Session - Run name: sad_einstein
+Aug-24 15:50:47.741 [main] DEBUG nextflow.Session - Executor pool size: 4
+Aug-24 15:50:47.779 [main] DEBUG nextflow.cli.CmdRun - 
+  Version: 0.23.3 build 4168
+  Modified: 09-02-2017 16:46 UTC (10:46 CDT)
+  System: Mac OS X 10.12.6
+  Runtime: Groovy 2.4.7 on Java HotSpot(TM) 64-Bit Server VM 1.8.0_66-b17
+  Encoding: UTF-8 (UTF-8)
+  Process: 22651@dhcp-129-105-38-105.bmbcb.northwestern.edu [129.105.38.105]
+  CPUs: 4 - Mem: 32 GB (210.6 MB) - Swap: 2 GB (924.2 MB)
+Aug-24 15:50:47.787 [main] DEBUG nextflow.Session - Work-dir: /Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/work [Mac OS X]
+Aug-24 15:50:47.787 [main] DEBUG nextflow.Session - Script base path does not exist or is not a directory: /Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/bin
+Aug-24 15:50:47.892 [main] DEBUG nextflow.Session - Session start invoked
+Aug-24 15:50:47.898 [main] DEBUG nextflow.processor.TaskDispatcher - Dispatcher > start
+Aug-24 15:50:47.899 [main] DEBUG nextflow.script.ScriptRunner - > Script parsing
+Aug-24 15:50:48.175 [main] DEBUG nextflow.script.ScriptRunner - > Launching execution
+Aug-24 15:50:48.550 [main] DEBUG nextflow.processor.ProcessFactory - << taskConfig executor: null
+Aug-24 15:50:48.550 [main] DEBUG nextflow.processor.ProcessFactory - >> processorType: 'local'
+Aug-24 15:50:48.554 [main] DEBUG nextflow.executor.Executor - Initializing executor: local
+Aug-24 15:50:48.556 [main] INFO  nextflow.executor.Executor - [warm up] executor > local
+Aug-24 15:50:48.561 [main] DEBUG n.processor.LocalPollingMonitor - Creating local task monitor for executor 'local' > cpus=4; memory=32 GB; capacity=4; pollInterval=100ms; dumpInterval=5m
+Aug-24 15:50:48.563 [main] DEBUG nextflow.processor.TaskDispatcher - Starting monitor: LocalPollingMonitor
+Aug-24 15:50:48.564 [main] DEBUG n.processor.TaskPollingMonitor - >>> barrier register (monitor: local)
+Aug-24 15:50:48.565 [main] DEBUG nextflow.executor.Executor - Invoke register for executor: local
+Aug-24 15:50:48.630 [main] DEBUG nextflow.Session - >>> barrier register (process: rsvsim)
+Aug-24 15:50:48.642 [main] DEBUG nextflow.processor.TaskProcessor - Creating operator > rsvsim -- maxForks: 4
+Aug-24 15:50:48.669 [main] DEBUG nextflow.processor.ProcessFactory - << taskConfig executor: null
+Aug-24 15:50:48.669 [main] DEBUG nextflow.processor.ProcessFactory - >> processorType: 'local'
+Aug-24 15:50:48.669 [main] DEBUG nextflow.executor.Executor - Initializing executor: local
+Aug-24 15:50:48.670 [main] DEBUG nextflow.Session - >>> barrier register (process: index_simulated_genome)
+Aug-24 15:50:48.677 [main] DEBUG nextflow.processor.TaskProcessor - Creating operator > index_simulated_genome -- maxForks: 4
+Aug-24 15:50:48.822 [Actor Thread 2] DEBUG nextflow.processor.TaskProcessor - <rsvsim> Poison pill arrived
+Aug-24 15:50:48.823 [Actor Thread 3] DEBUG nextflow.processor.StateObj - <rsvsim> State before poison: StateObj[submitted: 1; completed: 0; poisoned: false ]
+Aug-24 15:50:48.826 [main] DEBUG nextflow.processor.ProcessFactory - << taskConfig executor: null
+Aug-24 15:50:48.826 [main] DEBUG nextflow.processor.ProcessFactory - >> processorType: 'local'
+Aug-24 15:50:48.826 [main] DEBUG nextflow.executor.Executor - Initializing executor: local
+Aug-24 15:50:48.827 [main] DEBUG nextflow.Session - >>> barrier register (process: perform_alignment)
+Aug-24 15:50:48.832 [main] DEBUG nextflow.processor.TaskProcessor - Creating operator > perform_alignment -- maxForks: 4
+Aug-24 15:50:48.841 [main] DEBUG nextflow.Session - Session aborted -- Cause: Channel `fq_to_bam` has been used twice as an output by process `perform_alignment` and process `index_simulated_genome`
+Aug-24 15:50:48.844 [Thread-1] DEBUG n.processor.TaskPollingMonitor - <<< barrier arrives (monitor: local)
+Aug-24 15:50:48.849 [Actor Thread 4] DEBUG nextflow.processor.TaskProcessor - <index_simulated_genome> After stop
+Aug-24 15:50:48.853 [Actor Thread 2] DEBUG nextflow.processor.TaskProcessor - <rsvsim> After stop
+Aug-24 15:50:49.396 [main] ERROR nextflow.cli.Launcher - @unknown
+nextflow.dag.MultipleOutputChannelException: Channel `fq_to_bam` has been used twice as an output by process `perform_alignment` and process `index_simulated_genome`
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:422)
+	at org.codehaus.groovy.reflection.CachedConstructor.invoke(CachedConstructor.java:83)
+	at org.codehaus.groovy.runtime.callsite.ConstructorSite$ConstructorSiteNoUnwrapNoCoerce.callConstructor(ConstructorSite.java:105)
+	at org.codehaus.groovy.runtime.callsite.CallSiteArray.defaultCallConstructor(CallSiteArray.java:60)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.callConstructor(AbstractCallSite.java:235)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.callConstructor(AbstractCallSite.java:263)
+	at nextflow.dag.DAG.outbound(DAG.groovy:197)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at org.codehaus.groovy.reflection.CachedMethod.invoke(CachedMethod.java:93)
+	at groovy.lang.MetaMethod.doMethodInvoke(MetaMethod.java:325)
+	at org.codehaus.groovy.runtime.metaclass.ClosureMetaClass.invokeMethod(ClosureMetaClass.java:384)
+	at groovy.lang.MetaClassImpl.invokeMethod(MetaClassImpl.java:1024)
+	at org.codehaus.groovy.runtime.callsite.PogoMetaClassSite.callCurrent(PogoMetaClassSite.java:69)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.callCurrent(AbstractCallSite.java:174)
+	at nextflow.dag.DAG$_addVertex_closure2.doCall(DAG.groovy:132)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at org.codehaus.groovy.reflection.CachedMethod.invoke(CachedMethod.java:93)
+	at groovy.lang.MetaMethod.doMethodInvoke(MetaMethod.java:325)
+	at org.codehaus.groovy.runtime.metaclass.ClosureMetaClass.invokeMethod(ClosureMetaClass.java:294)
+	at groovy.lang.MetaClassImpl.invokeMethod(MetaClassImpl.java:1024)
+	at groovy.lang.Closure.call(Closure.java:414)
+	at groovy.lang.Closure.call(Closure.java:430)
+	at org.codehaus.groovy.runtime.DefaultGroovyMethods.each(DefaultGroovyMethods.java:2030)
+	at org.codehaus.groovy.runtime.DefaultGroovyMethods.each(DefaultGroovyMethods.java:2015)
+	at org.codehaus.groovy.runtime.DefaultGroovyMethods.each(DefaultGroovyMethods.java:2056)
+	at org.codehaus.groovy.runtime.dgm$162.invoke(Unknown Source)
+	at org.codehaus.groovy.runtime.callsite.PojoMetaMethodSite$PojoMetaMethodSiteNoUnwrapNoCoerce.invoke(PojoMetaMethodSite.java:274)
+	at org.codehaus.groovy.runtime.callsite.PojoMetaMethodSite.call(PojoMetaMethodSite.java:56)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:125)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.callSafe(AbstractCallSite.java:87)
+	at nextflow.dag.DAG.addVertex(DAG.groovy:131)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at org.codehaus.groovy.runtime.callsite.PogoMetaMethodSite$PogoCachedMethodSiteNoUnwrapNoCoerce.invoke(PogoMetaMethodSite.java:210)
+	at org.codehaus.groovy.runtime.callsite.PogoMetaMethodSite.callCurrent(PogoMetaMethodSite.java:59)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.callCurrent(AbstractCallSite.java:190)
+	at nextflow.dag.DAG.addProcessNode(DAG.groovy:86)
+	at nextflow.dag.DAG$addProcessNode$1.call(Unknown Source)
+	at nextflow.processor.TaskProcessor.createOperator(TaskProcessor.groovy:459)
+	at nextflow.processor.TaskProcessor.run(TaskProcessor.groovy:354)
+	at nextflow.processor.TaskProcessor$run.call(Unknown Source)
+	at nextflow.script.BaseScript.process(BaseScript.groovy:134)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at org.codehaus.groovy.runtime.callsite.PogoMetaMethodSite$PogoCachedMethodSiteNoUnwrapNoCoerce.invoke(PogoMetaMethodSite.java:210)
+	at org.codehaus.groovy.runtime.callsite.PogoMetaMethodSite.callCurrent(PogoMetaMethodSite.java:59)
+	at org.codehaus.groovy.runtime.callsite.CallSiteArray.defaultCallCurrent(CallSiteArray.java:52)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.callCurrent(AbstractCallSite.java:154)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.callCurrent(AbstractCallSite.java:174)
+	at _nf_script_e7ba5602.run(_nf_script_e7ba5602:79)
+	at nextflow.script.ScriptRunner.run(ScriptRunner.groovy:322)
+	at nextflow.script.ScriptRunner.execute(ScriptRunner.groovy:156)
+	at nextflow.cli.CmdRun.run(CmdRun.groovy:210)
+	at nextflow.cli.Launcher.run(Launcher.groovy:410)
+	at nextflow.cli.Launcher.main(Launcher.groovy:558)

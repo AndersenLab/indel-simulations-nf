@@ -1,0 +1,141 @@
+Aug-24 16:30:26.224 [main] DEBUG nextflow.cli.Launcher - $> /usr/local/bin/nextflow run main.nf
+Aug-24 16:30:26.341 [main] INFO  nextflow.cli.CmdRun - N E X T F L O W  ~  version 0.23.3
+Aug-24 16:30:26.358 [main] INFO  nextflow.cli.CmdRun - Launching `main.nf` [berserk_golick] - revision: 4156a8d342
+Aug-24 16:30:26.717 [main] DEBUG nextflow.Session - Session uuid: 3f8c3646-ca42-4bf7-b2a0-101a9eef32ad
+Aug-24 16:30:26.717 [main] DEBUG nextflow.Session - Run name: berserk_golick
+Aug-24 16:30:26.719 [main] DEBUG nextflow.Session - Executor pool size: 4
+Aug-24 16:30:26.753 [main] DEBUG nextflow.cli.CmdRun - 
+  Version: 0.23.3 build 4168
+  Modified: 09-02-2017 16:46 UTC (10:46 CDT)
+  System: Mac OS X 10.12.6
+  Runtime: Groovy 2.4.7 on Java HotSpot(TM) 64-Bit Server VM 1.8.0_66-b17
+  Encoding: UTF-8 (UTF-8)
+  Process: 25371@dhcp-129-105-38-105.bmbcb.northwestern.edu [129.105.38.105]
+  CPUs: 4 - Mem: 32 GB (457.9 MB) - Swap: 2 GB (922 MB)
+Aug-24 16:30:26.760 [main] DEBUG nextflow.Session - Work-dir: /Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/work [Mac OS X]
+Aug-24 16:30:26.760 [main] DEBUG nextflow.Session - Script base path does not exist or is not a directory: /Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/bin
+Aug-24 16:30:26.919 [main] DEBUG nextflow.Session - Session start invoked
+Aug-24 16:30:26.926 [main] DEBUG nextflow.processor.TaskDispatcher - Dispatcher > start
+Aug-24 16:30:26.927 [main] DEBUG nextflow.script.ScriptRunner - > Script parsing
+Aug-24 16:30:27.068 [main] DEBUG nextflow.script.ScriptRunner - > Launching execution
+Aug-24 16:30:27.248 [main] DEBUG nextflow.processor.ProcessFactory - << taskConfig executor: null
+Aug-24 16:30:27.248 [main] DEBUG nextflow.processor.ProcessFactory - >> processorType: 'local'
+Aug-24 16:30:27.254 [main] DEBUG nextflow.executor.Executor - Initializing executor: local
+Aug-24 16:30:27.255 [main] INFO  nextflow.executor.Executor - [warm up] executor > local
+Aug-24 16:30:27.258 [main] DEBUG n.processor.LocalPollingMonitor - Creating local task monitor for executor 'local' > cpus=4; memory=32 GB; capacity=4; pollInterval=100ms; dumpInterval=5m
+Aug-24 16:30:27.261 [main] DEBUG nextflow.processor.TaskDispatcher - Starting monitor: LocalPollingMonitor
+Aug-24 16:30:27.262 [main] DEBUG n.processor.TaskPollingMonitor - >>> barrier register (monitor: local)
+Aug-24 16:30:27.263 [main] DEBUG nextflow.executor.Executor - Invoke register for executor: local
+Aug-24 16:30:27.288 [main] DEBUG nextflow.Session - >>> barrier register (process: rsvsim)
+Aug-24 16:30:27.314 [main] DEBUG nextflow.processor.TaskProcessor - Creating operator > rsvsim -- maxForks: 4
+Aug-24 16:30:27.333 [Actor Thread 1] DEBUG nextflow.processor.TaskProcessor - <rsvsim> Poison pill arrived
+Aug-24 16:30:27.334 [Actor Thread 2] DEBUG nextflow.processor.StateObj - <rsvsim> State before poison: StateObj[submitted: 1; completed: 0; poisoned: false ]
+Aug-24 16:30:27.446 [main] DEBUG nextflow.processor.ProcessFactory - << taskConfig executor: null
+Aug-24 16:30:27.446 [main] DEBUG nextflow.processor.ProcessFactory - >> processorType: 'local'
+Aug-24 16:30:27.446 [main] DEBUG nextflow.executor.Executor - Initializing executor: local
+Aug-24 16:30:27.450 [main] DEBUG nextflow.Session - >>> barrier register (process: index_simulated_genome)
+Aug-24 16:30:27.458 [main] DEBUG nextflow.processor.TaskProcessor - Creating operator > index_simulated_genome -- maxForks: 4
+Aug-24 16:30:27.464 [main] DEBUG nextflow.processor.ProcessFactory - << taskConfig executor: null
+Aug-24 16:30:27.464 [main] DEBUG nextflow.processor.ProcessFactory - >> processorType: 'local'
+Aug-24 16:30:27.465 [main] DEBUG nextflow.executor.Executor - Initializing executor: local
+Aug-24 16:30:27.465 [main] DEBUG nextflow.Session - >>> barrier register (process: perform_alignment)
+Aug-24 16:30:27.471 [main] DEBUG nextflow.processor.TaskProcessor - Creating operator > perform_alignment -- maxForks: 4
+Aug-24 16:30:27.472 [main] DEBUG nextflow.script.ScriptRunner - > Await termination 
+Aug-24 16:30:27.472 [main] DEBUG nextflow.Session - Session await
+Aug-24 16:30:27.517 [Actor Thread 3] INFO  nextflow.Session - [0e/9f5dfd] Submitted process > rsvsim (1,10 - deletion)
+Aug-24 16:30:27.518 [Actor Thread 1] DEBUG nextflow.processor.TaskProcessor - <rsvsim> After stop
+Aug-24 16:30:43.312 [Actor Thread 2] DEBUG nextflow.processor.TaskProcessor - <rsvsim> Sending poison pills and terminating process
+Aug-24 16:30:43.318 [Actor Thread 1] DEBUG nextflow.processor.TaskProcessor - <index_simulated_genome> Poison pill arrived
+Aug-24 16:30:43.330 [Actor Thread 2] DEBUG nextflow.Session - <<< barrier arrive (process: rsvsim)
+Aug-24 16:30:43.342 [Actor Thread 7] DEBUG nextflow.processor.StateObj - <index_simulated_genome> State before poison: StateObj[submitted: 1; completed: 0; poisoned: false ]
+Aug-24 16:30:43.352 [Actor Thread 5] INFO  nextflow.Session - [8e/8c9829] Submitted process > index_simulated_genome (1)
+Aug-24 16:30:43.353 [Actor Thread 1] DEBUG nextflow.processor.TaskProcessor - <index_simulated_genome> After stop
+Aug-24 16:31:57.716 [Actor Thread 6] DEBUG nextflow.processor.TaskProcessor - <index_simulated_genome> Sending poison pills and terminating process
+Aug-24 16:31:57.716 [Actor Thread 6] DEBUG nextflow.Session - <<< barrier arrive (process: index_simulated_genome)
+Aug-24 16:31:57.716 [Actor Thread 1] DEBUG nextflow.processor.TaskProcessor - <perform_alignment> Poison pill arrived
+Aug-24 16:31:57.716 [Actor Thread 9] DEBUG nextflow.processor.StateObj - <perform_alignment> State before poison: StateObj[submitted: 1; completed: 0; poisoned: false ]
+Aug-24 16:31:57.728 [Actor Thread 10] INFO  nextflow.Session - [07/337037] Submitted process > perform_alignment (1)
+Aug-24 16:31:57.729 [Actor Thread 1] DEBUG nextflow.processor.TaskProcessor - <perform_alignment> After stop
+Aug-24 16:35:13.906 [Thread-1] DEBUG nextflow.processor.TaskProcessor - Process `perform_alignment (1)` is unable to find [UnixPath]: `/Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/work/07/337037b9c2ed89eb1a70650ff724e0/simulated_genome.bam` (pattern: `simulated_genome.bam`)
+Aug-24 16:35:13.932 [Thread-1] ERROR nextflow.processor.TaskProcessor - Error executing process > 'perform_alignment (1)'
+
+Caused by:
+  Missing output file(s) `simulated_genome.bam` expected by process `perform_alignment (1)`
+
+Command executed:
+
+  mkdir temp
+     bwa mem -t 4 -R '@RG	ID:N2	LB:N2	SM:N2' simulated_genome.fa /Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/data/ECA316_1P.fq.gz /Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/data/ECA316_2P.fq.gz | \
+     sambamba view --nthreads=4 --sam-input --format=bam --with-header /dev/stdin | \
+     sambamba sort --nthreads=4 --show-progress --tmpdir=temp --out=ECA316.bam /dev/stdin
+     sambamba index --nthreads=4 ECA316.bam
+
+Command exit status:
+  0
+
+Command output:
+  (empty)
+
+Command error:
+  [==============================================================================]
+  [==============================================================================]
+  [==============================================================================]
+  [==============================================================================]
+  [==============================================================================]
+  [==============================================================================]
+  [==============================================================================]
+  [==============================================================================]
+  [==============================================================================][M::mem_pestat] # candidate unique pairs for (FF, FR, RF, RR): (691, 42685, 30, 917)
+  [M::mem_pestat] analyzing insert size distribution for orientation FF...
+  [M::mem_pestat] (25, 50, 75) percentile: (177, 486, 1755)
+  [M::mem_pestat] low and high boundaries for computing mean and std.dev: (1, 4911)
+  [M::mem_pestat] mean and std.dev: (900.20, 1073.84)
+  [M::mem_pestat] low and high boundaries for proper pairs: (1, 6489)
+  [M::mem_pestat] analyzing insert size distribution for orientation FR...
+  [M::mem_pestat] (25, 50, 75) percentile: (189, 228, 279)
+  [M::mem_pestat] low and high boundaries for computing mean and std.dev: (9, 459)
+  [M::mem_pestat] mean and std.dev: (235.13, 63.89)
+  [M::mem_pestat] low and high boundaries for proper pairs: (1, 549)
+  [M::mem_pestat] analyzing insert size distribution for orientation RF...
+  [M::mem_pestat] (25, 50, 75) percentile: (302, 2950, 2952)
+  [M::mem_pestat] low and high boundaries for computing mean and std.dev: (1, 8252)
+  [M::mem_pestat] mean and std.dev: (1946.03, 1466.84)
+  [M::mem_pestat] low and high boundaries for proper pairs: (1, 10902)
+  [M::mem_pestat] analyzing insert size distribution for orientation RR...
+  [M::mem_pestat] (25, 50, 75) percentile: (163, 395, 1687)
+  [M::mem_pestat] low and high boundaries for computing mean and std.dev: (1, 4735)
+  [M::mem_pestat] mean and std.dev: (833.74, 970.37)
+  [M::mem_pestat] low and high boundaries for proper pairs: (1, 6259)
+  [M::mem_pestat] skip orientation FF
+  [M::mem_pestat] skip orientation RF
+  [M::mem_pestat] skip orientation RR
+  [M::mem_process_seqs] Processed 182792 reads in 98.089 CPU sec, 29.122 real sec
+  
+  [==============================================================================]
+  [==============================================================================]
+  [==============================================================================]
+  [==============================================================================]
+  [==============================================================================]
+  [==============================================================================]
+  [==============================================================================]
+  [==============================================================================]
+  [==============================================================================]
+  [==============================================================================]
+  [==============================================================================]
+  [==============================================================================][main] Version: 0.7.15-r1140
+  [main] CMD: bwa mem -t 4 -R @RG	ID:N2	LB:N2	SM:N2 simulated_genome.fa /Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/data/ECA316_1P.fq.gz /Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/data/ECA316_2P.fq.gz
+  [main] Real time: 191.348 sec; CPU: 655.164 sec
+  
+  [==============================================================================]
+
+Work dir:
+  /Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/work/07/337037b9c2ed89eb1a70650ff724e0
+
+Tip: view the complete command output by changing to the process work dir and entering the command: 'cat .command.out'
+Aug-24 16:35:13.938 [Actor Thread 8] DEBUG nextflow.processor.TaskProcessor - <perform_alignment> Sending poison pills and terminating process
+Aug-24 16:35:13.938 [Thread-1] DEBUG nextflow.Session - Session aborted -- Cause: Missing output file(s) `simulated_genome.bam` expected by process `perform_alignment (1)`
+Aug-24 16:35:13.938 [Actor Thread 8] DEBUG nextflow.Session - <<< barrier arrive (process: perform_alignment)
+Aug-24 16:35:13.940 [Thread-1] DEBUG n.processor.TaskPollingMonitor - <<< barrier arrives (monitor: local)
+Aug-24 16:35:13.941 [main] DEBUG nextflow.Session - Session await > all process finished
+Aug-24 16:35:13.941 [main] DEBUG nextflow.Session - Session await > all barriers passed
+Aug-24 16:35:13.973 [main] DEBUG nextflow.script.ScriptRunner - > Execution complete -- Goodbye

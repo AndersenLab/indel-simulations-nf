@@ -1,0 +1,64 @@
+Aug-24 16:39:35.332 [main] DEBUG nextflow.cli.Launcher - $> /usr/local/bin/nextflow run main.nf -resume
+Aug-24 16:39:35.446 [main] INFO  nextflow.cli.CmdRun - N E X T F L O W  ~  version 0.23.3
+Aug-24 16:39:35.456 [main] INFO  nextflow.cli.CmdRun - Launching `main.nf` [drunk_meitner] - revision: dde35c09de
+Aug-24 16:39:35.716 [main] DEBUG nextflow.Session - Session uuid: 3f8c3646-ca42-4bf7-b2a0-101a9eef32ad
+Aug-24 16:39:35.716 [main] DEBUG nextflow.Session - Run name: drunk_meitner
+Aug-24 16:39:35.718 [main] DEBUG nextflow.Session - Executor pool size: 4
+Aug-24 16:39:35.748 [main] DEBUG nextflow.cli.CmdRun - 
+  Version: 0.23.3 build 4168
+  Modified: 09-02-2017 16:46 UTC (10:46 CDT)
+  System: Mac OS X 10.12.6
+  Runtime: Groovy 2.4.7 on Java HotSpot(TM) 64-Bit Server VM 1.8.0_66-b17
+  Encoding: UTF-8 (UTF-8)
+  Process: 25579@dhcp-129-105-38-105.bmbcb.northwestern.edu [129.105.38.105]
+  CPUs: 4 - Mem: 32 GB (937.7 MB) - Swap: 2 GB (954 MB)
+Aug-24 16:39:35.780 [main] DEBUG nextflow.Session - Work-dir: /Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/work [Mac OS X]
+Aug-24 16:39:35.780 [main] DEBUG nextflow.Session - Script base path does not exist or is not a directory: /Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/bin
+Aug-24 16:39:35.883 [main] DEBUG nextflow.Session - Session start invoked
+Aug-24 16:39:35.889 [main] DEBUG nextflow.processor.TaskDispatcher - Dispatcher > start
+Aug-24 16:39:35.890 [main] DEBUG nextflow.script.ScriptRunner - > Script parsing
+Aug-24 16:39:36.006 [main] DEBUG nextflow.script.ScriptRunner - > Launching execution
+Aug-24 16:39:36.164 [main] DEBUG nextflow.processor.ProcessFactory - << taskConfig executor: null
+Aug-24 16:39:36.164 [main] DEBUG nextflow.processor.ProcessFactory - >> processorType: 'local'
+Aug-24 16:39:36.169 [main] DEBUG nextflow.executor.Executor - Initializing executor: local
+Aug-24 16:39:36.170 [main] INFO  nextflow.executor.Executor - [warm up] executor > local
+Aug-24 16:39:36.173 [main] DEBUG n.processor.LocalPollingMonitor - Creating local task monitor for executor 'local' > cpus=4; memory=32 GB; capacity=4; pollInterval=100ms; dumpInterval=5m
+Aug-24 16:39:36.175 [main] DEBUG nextflow.processor.TaskDispatcher - Starting monitor: LocalPollingMonitor
+Aug-24 16:39:36.279 [main] DEBUG n.processor.TaskPollingMonitor - >>> barrier register (monitor: local)
+Aug-24 16:39:36.280 [main] DEBUG nextflow.executor.Executor - Invoke register for executor: local
+Aug-24 16:39:36.303 [main] DEBUG nextflow.Session - >>> barrier register (process: rsvsim)
+Aug-24 16:39:36.311 [main] DEBUG nextflow.processor.TaskProcessor - Creating operator > rsvsim -- maxForks: 4
+Aug-24 16:39:36.325 [Actor Thread 2] DEBUG nextflow.processor.TaskProcessor - <rsvsim> Poison pill arrived
+Aug-24 16:39:36.326 [Actor Thread 3] DEBUG nextflow.processor.StateObj - <rsvsim> State before poison: StateObj[submitted: 1; completed: 0; poisoned: false ]
+Aug-24 16:39:36.329 [main] DEBUG nextflow.processor.ProcessFactory - << taskConfig executor: null
+Aug-24 16:39:36.329 [main] DEBUG nextflow.processor.ProcessFactory - >> processorType: 'local'
+Aug-24 16:39:36.329 [main] DEBUG nextflow.executor.Executor - Initializing executor: local
+Aug-24 16:39:36.330 [main] DEBUG nextflow.Session - >>> barrier register (process: index_simulated_genome)
+Aug-24 16:39:36.334 [main] DEBUG nextflow.processor.TaskProcessor - Creating operator > index_simulated_genome -- maxForks: 4
+Aug-24 16:39:36.339 [main] DEBUG nextflow.processor.ProcessFactory - << taskConfig executor: null
+Aug-24 16:39:36.339 [main] DEBUG nextflow.processor.ProcessFactory - >> processorType: 'local'
+Aug-24 16:39:36.339 [main] DEBUG nextflow.executor.Executor - Initializing executor: local
+Aug-24 16:39:36.340 [main] DEBUG nextflow.Session - >>> barrier register (process: perform_alignment)
+Aug-24 16:39:36.345 [main] DEBUG nextflow.processor.TaskProcessor - Creating operator > perform_alignment -- maxForks: 4
+Aug-24 16:39:36.346 [main] DEBUG nextflow.script.ScriptRunner - > Await termination 
+Aug-24 16:39:36.346 [main] DEBUG nextflow.Session - Session await
+Aug-24 16:39:36.428 [Actor Thread 1] INFO  nextflow.processor.TaskProcessor - [0e/9f5dfd] Cached process > rsvsim (1,10 - deletion)
+Aug-24 16:39:36.440 [Actor Thread 3] DEBUG nextflow.processor.TaskProcessor - <rsvsim> Sending poison pills and terminating process
+Aug-24 16:39:36.440 [Actor Thread 2] DEBUG nextflow.processor.TaskProcessor - <rsvsim> After stop
+Aug-24 16:39:36.441 [Actor Thread 1] DEBUG nextflow.processor.TaskProcessor - <index_simulated_genome> Poison pill arrived
+Aug-24 16:39:36.441 [Actor Thread 3] DEBUG nextflow.Session - <<< barrier arrive (process: rsvsim)
+Aug-24 16:39:36.441 [Actor Thread 5] DEBUG nextflow.processor.StateObj - <index_simulated_genome> State before poison: StateObj[submitted: 1; completed: 0; poisoned: false ]
+Aug-24 16:39:36.448 [Actor Thread 6] INFO  nextflow.processor.TaskProcessor - [8e/8c9829] Cached process > index_simulated_genome (1)
+Aug-24 16:39:36.449 [Actor Thread 3] DEBUG nextflow.processor.TaskProcessor - <index_simulated_genome> Sending poison pills and terminating process
+Aug-24 16:39:36.450 [Actor Thread 1] DEBUG nextflow.processor.TaskProcessor - <index_simulated_genome> After stop
+Aug-24 16:39:36.450 [Actor Thread 3] DEBUG nextflow.Session - <<< barrier arrive (process: index_simulated_genome)
+Aug-24 16:39:36.450 [Actor Thread 6] DEBUG nextflow.processor.TaskProcessor - <perform_alignment> Poison pill arrived
+Aug-24 16:39:36.450 [Actor Thread 3] DEBUG nextflow.processor.StateObj - <perform_alignment> State before poison: StateObj[submitted: 1; completed: 0; poisoned: false ]
+Aug-24 16:39:36.459 [Actor Thread 4] INFO  nextflow.processor.TaskProcessor - [07/337037] Cached process > perform_alignment (1)
+Aug-24 16:39:36.460 [Actor Thread 5] DEBUG nextflow.processor.TaskProcessor - <perform_alignment> Sending poison pills and terminating process
+Aug-24 16:39:36.460 [Actor Thread 6] DEBUG nextflow.processor.TaskProcessor - <perform_alignment> After stop
+Aug-24 16:39:36.460 [Actor Thread 5] DEBUG nextflow.Session - <<< barrier arrive (process: perform_alignment)
+Aug-24 16:39:36.460 [main] DEBUG nextflow.Session - Session await > all process finished
+Aug-24 16:39:36.487 [Thread-1] DEBUG n.processor.TaskPollingMonitor - <<< barrier arrives (monitor: local)
+Aug-24 16:39:36.487 [main] DEBUG nextflow.Session - Session await > all barriers passed
+Aug-24 16:39:36.518 [main] DEBUG nextflow.script.ScriptRunner - > Execution complete -- Goodbye

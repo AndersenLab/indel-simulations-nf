@@ -1,0 +1,94 @@
+Aug-24 16:23:43.902 [main] DEBUG nextflow.cli.Launcher - $> /usr/local/bin/nextflow run main.nf
+Aug-24 16:23:44.015 [main] INFO  nextflow.cli.CmdRun - N E X T F L O W  ~  version 0.23.3
+Aug-24 16:23:44.025 [main] INFO  nextflow.cli.CmdRun - Launching `main.nf` [tender_wescoff] - revision: 4cf1ddb9a4
+Aug-24 16:23:44.288 [main] DEBUG nextflow.Session - Session uuid: 0fc9395b-658e-49c9-80b4-045d67fa4388
+Aug-24 16:23:44.288 [main] DEBUG nextflow.Session - Run name: tender_wescoff
+Aug-24 16:23:44.291 [main] DEBUG nextflow.Session - Executor pool size: 4
+Aug-24 16:23:44.320 [main] DEBUG nextflow.cli.CmdRun - 
+  Version: 0.23.3 build 4168
+  Modified: 09-02-2017 16:46 UTC (10:46 CDT)
+  System: Mac OS X 10.12.6
+  Runtime: Groovy 2.4.7 on Java HotSpot(TM) 64-Bit Server VM 1.8.0_66-b17
+  Encoding: UTF-8 (UTF-8)
+  Process: 24984@dhcp-129-105-38-105.bmbcb.northwestern.edu [129.105.38.105]
+  CPUs: 4 - Mem: 32 GB (998.6 MB) - Swap: 2 GB (922 MB)
+Aug-24 16:23:44.327 [main] DEBUG nextflow.Session - Work-dir: /Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/work [Mac OS X]
+Aug-24 16:23:44.327 [main] DEBUG nextflow.Session - Script base path does not exist or is not a directory: /Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/bin
+Aug-24 16:23:44.432 [main] DEBUG nextflow.Session - Session start invoked
+Aug-24 16:23:44.438 [main] DEBUG nextflow.processor.TaskDispatcher - Dispatcher > start
+Aug-24 16:23:44.439 [main] DEBUG nextflow.script.ScriptRunner - > Script parsing
+Aug-24 16:23:44.554 [main] DEBUG nextflow.script.ScriptRunner - > Launching execution
+Aug-24 16:23:44.723 [main] DEBUG nextflow.processor.ProcessFactory - << taskConfig executor: null
+Aug-24 16:23:44.723 [main] DEBUG nextflow.processor.ProcessFactory - >> processorType: 'local'
+Aug-24 16:23:44.727 [main] DEBUG nextflow.executor.Executor - Initializing executor: local
+Aug-24 16:23:44.729 [main] INFO  nextflow.executor.Executor - [warm up] executor > local
+Aug-24 16:23:44.732 [main] DEBUG n.processor.LocalPollingMonitor - Creating local task monitor for executor 'local' > cpus=4; memory=32 GB; capacity=4; pollInterval=100ms; dumpInterval=5m
+Aug-24 16:23:44.735 [main] DEBUG nextflow.processor.TaskDispatcher - Starting monitor: LocalPollingMonitor
+Aug-24 16:23:44.735 [main] DEBUG n.processor.TaskPollingMonitor - >>> barrier register (monitor: local)
+Aug-24 16:23:44.737 [main] DEBUG nextflow.executor.Executor - Invoke register for executor: local
+Aug-24 16:23:44.762 [main] DEBUG nextflow.Session - >>> barrier register (process: rsvsim)
+Aug-24 16:23:44.772 [main] DEBUG nextflow.processor.TaskProcessor - Creating operator > rsvsim -- maxForks: 4
+Aug-24 16:23:44.799 [Actor Thread 2] DEBUG nextflow.processor.TaskProcessor - <rsvsim> Poison pill arrived
+Aug-24 16:23:44.799 [Actor Thread 3] DEBUG nextflow.processor.StateObj - <rsvsim> State before poison: StateObj[submitted: 1; completed: 0; poisoned: false ]
+Aug-24 16:23:44.901 [main] DEBUG nextflow.processor.ProcessFactory - << taskConfig executor: null
+Aug-24 16:23:44.901 [main] DEBUG nextflow.processor.ProcessFactory - >> processorType: 'local'
+Aug-24 16:23:44.902 [main] DEBUG nextflow.executor.Executor - Initializing executor: local
+Aug-24 16:23:44.902 [main] DEBUG nextflow.Session - >>> barrier register (process: index_simulated_genome)
+Aug-24 16:23:44.910 [main] DEBUG nextflow.processor.TaskProcessor - Creating operator > index_simulated_genome -- maxForks: 4
+Aug-24 16:23:44.918 [main] DEBUG nextflow.processor.ProcessFactory - << taskConfig executor: null
+Aug-24 16:23:44.918 [main] DEBUG nextflow.processor.ProcessFactory - >> processorType: 'local'
+Aug-24 16:23:44.918 [main] DEBUG nextflow.executor.Executor - Initializing executor: local
+Aug-24 16:23:44.919 [main] DEBUG nextflow.Session - >>> barrier register (process: perform_alignment)
+Aug-24 16:23:44.924 [main] DEBUG nextflow.processor.TaskProcessor - Creating operator > perform_alignment -- maxForks: 4
+Aug-24 16:23:44.925 [main] DEBUG nextflow.script.ScriptRunner - > Await termination 
+Aug-24 16:23:44.925 [main] DEBUG nextflow.Session - Session await
+Aug-24 16:23:44.977 [Actor Thread 1] INFO  nextflow.Session - [2d/aecf72] Submitted process > rsvsim (1,10 - deletion)
+Aug-24 16:23:44.978 [Actor Thread 2] DEBUG nextflow.processor.TaskProcessor - <rsvsim> After stop
+Aug-24 16:23:58.255 [Actor Thread 5] INFO  nextflow.Session - [68/1eb379] Submitted process > index_simulated_genome (1)
+Aug-24 16:23:58.263 [Actor Thread 3] DEBUG nextflow.processor.TaskProcessor - <rsvsim> Sending poison pills and terminating process
+Aug-24 16:23:58.266 [Actor Thread 3] DEBUG nextflow.Session - <<< barrier arrive (process: rsvsim)
+Aug-24 16:23:58.267 [Actor Thread 5] DEBUG nextflow.processor.TaskProcessor - <index_simulated_genome> Poison pill arrived
+Aug-24 16:23:58.267 [Actor Thread 5] DEBUG nextflow.processor.TaskProcessor - <index_simulated_genome> After stop
+Aug-24 16:23:58.268 [Actor Thread 3] DEBUG nextflow.processor.StateObj - <index_simulated_genome> State before poison: StateObj[submitted: 1; completed: 0; poisoned: false ]
+Aug-24 16:25:11.333 [Actor Thread 6] DEBUG nextflow.processor.TaskProcessor - <index_simulated_genome> Sending poison pills and terminating process
+Aug-24 16:25:11.333 [Actor Thread 6] DEBUG nextflow.Session - <<< barrier arrive (process: index_simulated_genome)
+Aug-24 16:25:11.334 [Actor Thread 5] DEBUG nextflow.processor.TaskProcessor - <perform_alignment> Poison pill arrived
+Aug-24 16:25:11.336 [Actor Thread 6] DEBUG nextflow.processor.StateObj - <perform_alignment> State before poison: StateObj[submitted: 1; completed: 0; poisoned: false ]
+Aug-24 16:25:11.345 [Actor Thread 8] INFO  nextflow.Session - [22/ceef15] Submitted process > perform_alignment (1)
+Aug-24 16:25:11.345 [Actor Thread 5] DEBUG nextflow.processor.TaskProcessor - <perform_alignment> After stop
+Aug-24 16:25:11.571 [Thread-1] ERROR nextflow.processor.TaskProcessor - Error executing process > 'perform_alignment (1)'
+
+Caused by:
+  Missing output file(s) `*.fa.bwt` expected by process `perform_alignment (1)`
+
+Command executed:
+
+  mkdir temp
+     bwa mem -t 4 -R '@RG	ID:N2	LB:N2	SM:N2' simulated_genome.fa /Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/data/ECA316_1P.fq.gz /Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/data/ECA316_2P.fq.gz | \
+     sambamba view --nthreads=4 --sam-input --format=bam --with-header /dev/stdin | \
+     sambamba sort --nthreads=4 --show-progress --tmpdir=temp --out=ECA316.bam /dev/stdin
+     sambamba index --nthreads=4 ECA316.bam
+
+Command exit status:
+  0
+
+Command output:
+  (empty)
+
+Command error:
+  [E::bwa_idx_load_from_disk] fail to locate the index files
+  Writing sorted chunks to temporary directory...
+  [                                                                              ]
+  [==============================================================================]
+
+Work dir:
+  /Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/work/22/ceef15e1badac9fb477e7fc52d9dfe
+
+Tip: you can try to figure out what's wrong by changing to the process work dir and showing the script file named: '.command.sh'
+Aug-24 16:25:11.574 [Thread-1] DEBUG nextflow.Session - Session aborted -- Cause: Missing output file(s) `*.fa.bwt` expected by process `perform_alignment (1)`
+Aug-24 16:25:11.576 [Thread-1] DEBUG n.processor.TaskPollingMonitor - <<< barrier arrives (monitor: local)
+Aug-24 16:25:11.581 [Actor Thread 7] DEBUG nextflow.processor.TaskProcessor - <perform_alignment> Sending poison pills and terminating process
+Aug-24 16:25:11.582 [Actor Thread 7] DEBUG nextflow.Session - <<< barrier arrive (process: perform_alignment)
+Aug-24 16:25:11.583 [main] DEBUG nextflow.Session - Session await > all process finished
+Aug-24 16:25:11.584 [main] DEBUG nextflow.Session - Session await > all barriers passed
+Aug-24 16:25:11.632 [main] DEBUG nextflow.script.ScriptRunner - > Execution complete -- Goodbye
