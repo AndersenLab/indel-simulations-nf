@@ -1,95 +1,221 @@
-Aug-24 16:27:00.753 [main] DEBUG nextflow.cli.Launcher - $> /usr/local/bin/nextflow run main.nf
-Aug-24 16:27:00.873 [main] INFO  nextflow.cli.CmdRun - N E X T F L O W  ~  version 0.23.3
-Aug-24 16:27:00.883 [main] INFO  nextflow.cli.CmdRun - Launching `main.nf` [grave_banach] - revision: cb444146d5
-Aug-24 16:27:01.150 [main] DEBUG nextflow.Session - Session uuid: ca8b07a1-8196-4acb-bf9a-69c7fc020746
-Aug-24 16:27:01.150 [main] DEBUG nextflow.Session - Run name: grave_banach
-Aug-24 16:27:01.152 [main] DEBUG nextflow.Session - Executor pool size: 4
-Aug-24 16:27:01.182 [main] DEBUG nextflow.cli.CmdRun - 
+Sep-01 17:02:30.313 [main] DEBUG nextflow.cli.Launcher - $> /usr/local/bin/nextflow main.nf -resume
+Sep-01 17:02:30.428 [main] INFO  nextflow.cli.CmdRun - N E X T F L O W  ~  version 0.23.3
+Sep-01 17:02:30.437 [main] INFO  nextflow.cli.CmdRun - Launching `main.nf` [zen_varahamihira] - revision: 19b0f39849
+Sep-01 17:02:30.658 [main] DEBUG nextflow.Session - Session uuid: 3f8c3646-ca42-4bf7-b2a0-101a9eef32ad
+Sep-01 17:02:30.658 [main] DEBUG nextflow.Session - Run name: zen_varahamihira
+Sep-01 17:02:30.660 [main] DEBUG nextflow.Session - Executor pool size: 4
+Sep-01 17:02:30.675 [main] DEBUG nextflow.cli.CmdRun - 
   Version: 0.23.3 build 4168
   Modified: 09-02-2017 16:46 UTC (10:46 CDT)
   System: Mac OS X 10.12.6
   Runtime: Groovy 2.4.7 on Java HotSpot(TM) 64-Bit Server VM 1.8.0_66-b17
   Encoding: UTF-8 (UTF-8)
-  Process: 25177@dhcp-129-105-38-105.bmbcb.northwestern.edu [129.105.38.105]
-  CPUs: 4 - Mem: 32 GB (870.2 MB) - Swap: 2 GB (922 MB)
-Aug-24 16:27:01.188 [main] DEBUG nextflow.Session - Work-dir: /Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/work [Mac OS X]
-Aug-24 16:27:01.189 [main] DEBUG nextflow.Session - Script base path does not exist or is not a directory: /Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/bin
-Aug-24 16:27:01.260 [main] DEBUG nextflow.Session - Session start invoked
-Aug-24 16:27:01.266 [main] DEBUG nextflow.processor.TaskDispatcher - Dispatcher > start
-Aug-24 16:27:01.267 [main] DEBUG nextflow.script.ScriptRunner - > Script parsing
-Aug-24 16:27:01.417 [main] DEBUG nextflow.script.ScriptRunner - > Launching execution
-Aug-24 16:27:01.619 [main] DEBUG nextflow.processor.ProcessFactory - << taskConfig executor: null
-Aug-24 16:27:01.619 [main] DEBUG nextflow.processor.ProcessFactory - >> processorType: 'local'
-Aug-24 16:27:01.624 [main] DEBUG nextflow.executor.Executor - Initializing executor: local
-Aug-24 16:27:01.626 [main] INFO  nextflow.executor.Executor - [warm up] executor > local
-Aug-24 16:27:01.629 [main] DEBUG n.processor.LocalPollingMonitor - Creating local task monitor for executor 'local' > cpus=4; memory=32 GB; capacity=4; pollInterval=100ms; dumpInterval=5m
-Aug-24 16:27:01.631 [main] DEBUG nextflow.processor.TaskDispatcher - Starting monitor: LocalPollingMonitor
-Aug-24 16:27:01.632 [main] DEBUG n.processor.TaskPollingMonitor - >>> barrier register (monitor: local)
-Aug-24 16:27:01.633 [main] DEBUG nextflow.executor.Executor - Invoke register for executor: local
-Aug-24 16:27:01.656 [main] DEBUG nextflow.Session - >>> barrier register (process: rsvsim)
-Aug-24 16:27:01.671 [main] DEBUG nextflow.processor.TaskProcessor - Creating operator > rsvsim -- maxForks: 4
-Aug-24 16:27:01.693 [Actor Thread 2] DEBUG nextflow.processor.TaskProcessor - <rsvsim> Poison pill arrived
-Aug-24 16:27:01.695 [Actor Thread 3] DEBUG nextflow.processor.StateObj - <rsvsim> State before poison: StateObj[submitted: 1; completed: 0; poisoned: false ]
-Aug-24 16:27:01.797 [main] DEBUG nextflow.processor.ProcessFactory - << taskConfig executor: null
-Aug-24 16:27:01.797 [main] DEBUG nextflow.processor.ProcessFactory - >> processorType: 'local'
-Aug-24 16:27:01.797 [main] DEBUG nextflow.executor.Executor - Initializing executor: local
-Aug-24 16:27:01.798 [main] DEBUG nextflow.Session - >>> barrier register (process: index_simulated_genome)
-Aug-24 16:27:01.803 [main] DEBUG nextflow.processor.TaskProcessor - Creating operator > index_simulated_genome -- maxForks: 4
-Aug-24 16:27:01.809 [main] DEBUG nextflow.processor.ProcessFactory - << taskConfig executor: null
-Aug-24 16:27:01.809 [main] DEBUG nextflow.processor.ProcessFactory - >> processorType: 'local'
-Aug-24 16:27:01.809 [main] DEBUG nextflow.executor.Executor - Initializing executor: local
-Aug-24 16:27:01.809 [main] DEBUG nextflow.Session - >>> barrier register (process: perform_alignment)
-Aug-24 16:27:01.816 [main] DEBUG nextflow.processor.TaskProcessor - Creating operator > perform_alignment -- maxForks: 4
-Aug-24 16:27:01.816 [main] DEBUG nextflow.script.ScriptRunner - > Await termination 
-Aug-24 16:27:01.816 [main] DEBUG nextflow.Session - Session await
-Aug-24 16:27:01.874 [Actor Thread 1] INFO  nextflow.Session - [5b/e28748] Submitted process > rsvsim (1,10 - deletion)
-Aug-24 16:27:01.875 [Actor Thread 2] DEBUG nextflow.processor.TaskProcessor - <rsvsim> After stop
-Aug-24 16:27:15.133 [Actor Thread 3] DEBUG nextflow.processor.TaskProcessor - <rsvsim> Sending poison pills and terminating process
-Aug-24 16:27:15.150 [Actor Thread 3] DEBUG nextflow.Session - <<< barrier arrive (process: rsvsim)
-Aug-24 16:27:15.150 [Actor Thread 2] DEBUG nextflow.processor.TaskProcessor - <index_simulated_genome> Poison pill arrived
-Aug-24 16:27:15.151 [Actor Thread 7] DEBUG nextflow.processor.StateObj - <index_simulated_genome> State before poison: StateObj[submitted: 1; completed: 0; poisoned: false ]
-Aug-24 16:27:15.154 [Actor Thread 5] INFO  nextflow.Session - [a9/7fe42e] Submitted process > index_simulated_genome (1)
-Aug-24 16:27:15.154 [Actor Thread 2] DEBUG nextflow.processor.TaskProcessor - <index_simulated_genome> After stop
-Aug-24 16:28:29.272 [Actor Thread 6] DEBUG nextflow.processor.TaskProcessor - <index_simulated_genome> Sending poison pills and terminating process
-Aug-24 16:28:29.272 [Actor Thread 6] DEBUG nextflow.Session - <<< barrier arrive (process: index_simulated_genome)
-Aug-24 16:28:29.272 [Actor Thread 2] DEBUG nextflow.processor.TaskProcessor - <perform_alignment> Poison pill arrived
-Aug-24 16:28:29.272 [Actor Thread 6] DEBUG nextflow.processor.StateObj - <perform_alignment> State before poison: StateObj[submitted: 1; completed: 0; poisoned: false ]
-Aug-24 16:28:29.283 [Actor Thread 10] INFO  nextflow.Session - [19/2ae6e6] Submitted process > perform_alignment (1)
-Aug-24 16:28:29.284 [Actor Thread 2] DEBUG nextflow.processor.TaskProcessor - <perform_alignment> After stop
-Aug-24 16:28:29.512 [Thread-1] DEBUG nextflow.processor.TaskProcessor - Process `perform_alignment (1)` is unable to find [UnixPath]: `/Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/work/19/2ae6e6674537d1b404032ab600745d/simulated_genome.bam` (pattern: `simulated_genome.bam`)
-Aug-24 16:28:29.542 [Thread-1] ERROR nextflow.processor.TaskProcessor - Error executing process > 'perform_alignment (1)'
+  Process: 6217@dhcp-129-105-38-105.bmbcb.northwestern.edu [129.105.38.105]
+  CPUs: 4 - Mem: 32 GB (1.8 GB) - Swap: 0 (0)
+Sep-01 17:02:30.698 [main] DEBUG nextflow.Session - Work-dir: /Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/work [Mac OS X]
+Sep-01 17:02:30.699 [main] DEBUG nextflow.Session - Script base path does not exist or is not a directory: /Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/bin
+Sep-01 17:02:30.786 [main] DEBUG nextflow.Session - Session start invoked
+Sep-01 17:02:30.791 [main] DEBUG nextflow.processor.TaskDispatcher - Dispatcher > start
+Sep-01 17:02:30.791 [main] DEBUG nextflow.script.ScriptRunner - > Script parsing
+Sep-01 17:02:30.936 [main] DEBUG nextflow.script.ScriptRunner - > Launching execution
+Sep-01 17:02:31.106 [main] DEBUG nextflow.processor.ProcessFactory - << taskConfig executor: null
+Sep-01 17:02:31.106 [main] DEBUG nextflow.processor.ProcessFactory - >> processorType: 'local'
+Sep-01 17:02:31.109 [main] DEBUG nextflow.executor.Executor - Initializing executor: local
+Sep-01 17:02:31.110 [main] INFO  nextflow.executor.Executor - [warm up] executor > local
+Sep-01 17:02:31.113 [main] DEBUG n.processor.LocalPollingMonitor - Creating local task monitor for executor 'local' > cpus=4; memory=32 GB; capacity=4; pollInterval=100ms; dumpInterval=5m
+Sep-01 17:02:31.115 [main] DEBUG nextflow.processor.TaskDispatcher - Starting monitor: LocalPollingMonitor
+Sep-01 17:02:31.116 [main] DEBUG n.processor.TaskPollingMonitor - >>> barrier register (monitor: local)
+Sep-01 17:02:31.117 [main] DEBUG nextflow.executor.Executor - Invoke register for executor: local
+Sep-01 17:02:31.134 [main] DEBUG nextflow.Session - >>> barrier register (process: rsvsim)
+Sep-01 17:02:31.140 [main] DEBUG nextflow.processor.TaskProcessor - Creating operator > rsvsim -- maxForks: 4
+Sep-01 17:02:31.155 [Actor Thread 2] DEBUG nextflow.processor.TaskProcessor - <rsvsim> Poison pill arrived
+Sep-01 17:02:31.157 [Actor Thread 3] DEBUG nextflow.processor.StateObj - <rsvsim> State before poison: StateObj[submitted: 1; completed: 0; poisoned: false ]
+Sep-01 17:02:31.158 [main] DEBUG nextflow.processor.ProcessFactory - << taskConfig executor: null
+Sep-01 17:02:31.158 [main] DEBUG nextflow.processor.ProcessFactory - >> processorType: 'local'
+Sep-01 17:02:31.158 [main] DEBUG nextflow.executor.Executor - Initializing executor: local
+Sep-01 17:02:31.158 [main] DEBUG nextflow.Session - >>> barrier register (process: index_simulated_genome)
+Sep-01 17:02:31.163 [main] DEBUG nextflow.processor.TaskProcessor - Creating operator > index_simulated_genome -- maxForks: 4
+Sep-01 17:02:31.172 [main] DEBUG nextflow.processor.ProcessFactory - << taskConfig executor: null
+Sep-01 17:02:31.172 [main] DEBUG nextflow.processor.ProcessFactory - >> processorType: 'local'
+Sep-01 17:02:31.172 [main] DEBUG nextflow.executor.Executor - Initializing executor: local
+Sep-01 17:02:31.172 [main] DEBUG nextflow.Session - >>> barrier register (process: perform_alignment)
+Sep-01 17:02:31.177 [main] DEBUG nextflow.processor.TaskProcessor - Creating operator > perform_alignment -- maxForks: 4
+Sep-01 17:02:31.183 [main] DEBUG nextflow.processor.ProcessFactory - << taskConfig executor: null
+Sep-01 17:02:31.183 [main] DEBUG nextflow.processor.ProcessFactory - >> processorType: 'local'
+Sep-01 17:02:31.183 [main] DEBUG nextflow.executor.Executor - Initializing executor: local
+Sep-01 17:02:31.184 [main] WARN  nextflow.processor.TaskProcessor - Output `set` must define at least two component -- Check process `platypus`
+Sep-01 17:02:31.184 [main] DEBUG nextflow.Session - >>> barrier register (process: platypus)
+Sep-01 17:02:31.189 [main] DEBUG nextflow.processor.TaskProcessor - Creating operator > platypus -- maxForks: 4
+Sep-01 17:02:31.191 [main] DEBUG nextflow.processor.ProcessFactory - << taskConfig executor: null
+Sep-01 17:02:31.192 [main] DEBUG nextflow.processor.ProcessFactory - >> processorType: 'local'
+Sep-01 17:02:31.192 [main] DEBUG nextflow.executor.Executor - Initializing executor: local
+Sep-01 17:02:31.192 [main] WARN  nextflow.processor.TaskProcessor - Output `set` must define at least two component -- Check process `freebayes`
+Sep-01 17:02:31.192 [main] DEBUG nextflow.Session - >>> barrier register (process: freebayes)
+Sep-01 17:02:31.196 [main] DEBUG nextflow.processor.TaskProcessor - Creating operator > freebayes -- maxForks: 4
+Sep-01 17:02:31.199 [main] DEBUG nextflow.processor.ProcessFactory - << taskConfig executor: null
+Sep-01 17:02:31.199 [main] DEBUG nextflow.processor.ProcessFactory - >> processorType: 'local'
+Sep-01 17:02:31.199 [main] DEBUG nextflow.executor.Executor - Initializing executor: local
+Sep-01 17:02:31.199 [main] WARN  nextflow.processor.TaskProcessor - Output `set` must define at least two component -- Check process `gatk`
+Sep-01 17:02:31.199 [main] DEBUG nextflow.Session - >>> barrier register (process: gatk)
+Sep-01 17:02:31.312 [main] DEBUG nextflow.processor.TaskProcessor - Creating operator > gatk -- maxForks: 4
+Sep-01 17:02:31.314 [main] DEBUG nextflow.processor.ProcessFactory - << taskConfig executor: null
+Sep-01 17:02:31.314 [main] DEBUG nextflow.processor.ProcessFactory - >> processorType: 'local'
+Sep-01 17:02:31.315 [main] DEBUG nextflow.executor.Executor - Initializing executor: local
+Sep-01 17:02:31.315 [main] WARN  nextflow.processor.TaskProcessor - Output `set` must define at least two component -- Check process `bcftools`
+Sep-01 17:02:31.315 [main] DEBUG nextflow.Session - >>> barrier register (process: bcftools)
+Sep-01 17:02:31.320 [main] DEBUG nextflow.processor.TaskProcessor - Creating operator > bcftools -- maxForks: 4
+Sep-01 17:02:31.323 [main] DEBUG nextflow.processor.ProcessFactory - << taskConfig executor: null
+Sep-01 17:02:31.323 [main] DEBUG nextflow.processor.ProcessFactory - >> processorType: 'local'
+Sep-01 17:02:31.323 [main] DEBUG nextflow.executor.Executor - Initializing executor: local
+Sep-01 17:02:31.323 [main] WARN  nextflow.processor.TaskProcessor - Output `set` must define at least two component -- Check process `delly`
+Sep-01 17:02:31.324 [main] DEBUG nextflow.Session - >>> barrier register (process: delly)
+Sep-01 17:02:31.329 [main] DEBUG nextflow.processor.TaskProcessor - Creating operator > delly -- maxForks: 4
+Sep-01 17:02:31.332 [main] DEBUG nextflow.processor.ProcessFactory - << taskConfig executor: null
+Sep-01 17:02:31.332 [main] DEBUG nextflow.processor.ProcessFactory - >> processorType: 'local'
+Sep-01 17:02:31.332 [main] DEBUG nextflow.executor.Executor - Initializing executor: local
+Sep-01 17:02:31.332 [main] WARN  nextflow.processor.TaskProcessor - Output `set` must define at least two component -- Check process `lumpy`
+Sep-01 17:02:31.332 [main] DEBUG nextflow.Session - >>> barrier register (process: lumpy)
+Sep-01 17:02:31.336 [main] DEBUG nextflow.processor.TaskProcessor - Creating operator > lumpy -- maxForks: 4
+Sep-01 17:02:31.338 [main] DEBUG nextflow.processor.ProcessFactory - << taskConfig executor: null
+Sep-01 17:02:31.338 [main] DEBUG nextflow.processor.ProcessFactory - >> processorType: 'local'
+Sep-01 17:02:31.338 [main] DEBUG nextflow.executor.Executor - Initializing executor: local
+Sep-01 17:02:31.338 [main] WARN  nextflow.processor.TaskProcessor - Output `set` must define at least two component -- Check process `pindel`
+Sep-01 17:02:31.339 [main] DEBUG nextflow.Session - >>> barrier register (process: pindel)
+Sep-01 17:02:31.343 [main] DEBUG nextflow.processor.TaskProcessor - Creating operator > pindel -- maxForks: 4
+Sep-01 17:02:31.343 [main] DEBUG nextflow.script.ScriptRunner - > Await termination 
+Sep-01 17:02:31.343 [main] DEBUG nextflow.Session - Session await
+Sep-01 17:02:31.372 [Actor Thread 1] INFO  nextflow.processor.TaskProcessor - [0e/9f5dfd] Cached process > rsvsim (1,10 - deletion)
+Sep-01 17:02:31.384 [Actor Thread 3] DEBUG nextflow.processor.TaskProcessor - <rsvsim> Sending poison pills and terminating process
+Sep-01 17:02:31.384 [Actor Thread 2] DEBUG nextflow.processor.TaskProcessor - <rsvsim> After stop
+Sep-01 17:02:31.385 [Actor Thread 3] DEBUG nextflow.Session - <<< barrier arrive (process: rsvsim)
+Sep-01 17:02:31.385 [Actor Thread 2] DEBUG nextflow.processor.TaskProcessor - <index_simulated_genome> Poison pill arrived
+Sep-01 17:02:31.385 [Actor Thread 5] DEBUG nextflow.processor.StateObj - <index_simulated_genome> State before poison: StateObj[submitted: 1; completed: 0; poisoned: false ]
+Sep-01 17:02:31.394 [Actor Thread 6] INFO  nextflow.processor.TaskProcessor - [6a/e2fec0] Cached process > index_simulated_genome (1)
+Sep-01 17:02:31.395 [Actor Thread 3] DEBUG nextflow.processor.TaskProcessor - <index_simulated_genome> Sending poison pills and terminating process
+Sep-01 17:02:31.396 [Actor Thread 3] DEBUG nextflow.Session - <<< barrier arrive (process: index_simulated_genome)
+Sep-01 17:02:31.396 [Actor Thread 6] DEBUG nextflow.processor.TaskProcessor - <perform_alignment> Poison pill arrived
+Sep-01 17:02:31.396 [Actor Thread 2] DEBUG nextflow.processor.TaskProcessor - <index_simulated_genome> After stop
+Sep-01 17:02:31.396 [Actor Thread 3] DEBUG nextflow.processor.StateObj - <perform_alignment> State before poison: StateObj[submitted: 1; completed: 0; poisoned: false ]
+Sep-01 17:02:31.404 [Actor Thread 4] INFO  nextflow.processor.TaskProcessor - [d3/2304ec] Cached process > perform_alignment (1)
+Sep-01 17:02:31.405 [Actor Thread 5] DEBUG nextflow.processor.TaskProcessor - <perform_alignment> Sending poison pills and terminating process
+Sep-01 17:02:31.405 [Actor Thread 5] DEBUG nextflow.Session - <<< barrier arrive (process: perform_alignment)
+Sep-01 17:02:31.405 [Actor Thread 6] DEBUG nextflow.processor.TaskProcessor - <perform_alignment> After stop
+Sep-01 17:02:31.408 [Actor Thread 16] DEBUG nextflow.processor.TaskProcessor - <platypus> Poison pill arrived
+Sep-01 17:02:31.409 [Actor Thread 5] DEBUG nextflow.processor.StateObj - <platypus> State before poison: StateObj[submitted: 1; completed: 0; poisoned: false ]
+Sep-01 17:02:31.409 [Actor Thread 18] DEBUG nextflow.processor.TaskProcessor - <bcftools> Poison pill arrived
+Sep-01 17:02:31.409 [Actor Thread 4] DEBUG nextflow.processor.TaskProcessor - <gatk> Poison pill arrived
+Sep-01 17:02:31.409 [Actor Thread 5] DEBUG nextflow.processor.StateObj - <bcftools> State before poison: StateObj[submitted: 1; completed: 0; poisoned: false ]
+Sep-01 17:02:31.409 [Actor Thread 3] DEBUG nextflow.processor.StateObj - <gatk> State before poison: StateObj[submitted: 1; completed: 0; poisoned: false ]
+Sep-01 17:02:31.410 [Actor Thread 13] DEBUG nextflow.processor.TaskProcessor - <lumpy> Poison pill arrived
+Sep-01 17:02:31.410 [Actor Thread 3] DEBUG nextflow.processor.StateObj - <lumpy> State before poison: StateObj[submitted: 1; completed: 0; poisoned: false ]
+Sep-01 17:02:31.410 [Actor Thread 11] DEBUG nextflow.processor.TaskProcessor - <pindel> Poison pill arrived
+Sep-01 17:02:31.411 [Actor Thread 3] DEBUG nextflow.processor.StateObj - <pindel> State before poison: StateObj[submitted: 1; completed: 0; poisoned: false ]
+Sep-01 17:02:31.411 [Actor Thread 8] DEBUG nextflow.processor.TaskProcessor - <delly> Poison pill arrived
+Sep-01 17:02:31.412 [Actor Thread 3] DEBUG nextflow.processor.StateObj - <delly> State before poison: StateObj[submitted: 1; completed: 0; poisoned: false ]
+Sep-01 17:02:31.412 [Actor Thread 7] DEBUG nextflow.processor.TaskProcessor - <freebayes> Poison pill arrived
+Sep-01 17:02:31.412 [Actor Thread 3] DEBUG nextflow.processor.StateObj - <freebayes> State before poison: StateObj[submitted: 1; completed: 0; poisoned: false ]
+Sep-01 17:02:31.421 [Actor Thread 1] INFO  nextflow.processor.TaskProcessor - [ab/51950b] Cached process > bcftools (1)
+Sep-01 17:02:31.422 [Actor Thread 5] DEBUG nextflow.processor.TaskProcessor - <bcftools> Sending poison pills and terminating process
+Sep-01 17:02:31.422 [Actor Thread 18] DEBUG nextflow.processor.TaskProcessor - <bcftools> After stop
+Sep-01 17:02:31.422 [Actor Thread 5] DEBUG nextflow.Session - <<< barrier arrive (process: bcftools)
+Sep-01 17:02:31.425 [Actor Thread 10] INFO  nextflow.processor.TaskProcessor - [60/76f7f9] Cached process > gatk (1)
+Sep-01 17:02:31.426 [Actor Thread 17] INFO  nextflow.processor.TaskProcessor - [e2/939259] Cached process > lumpy (1)
+Sep-01 17:02:31.426 [Actor Thread 4] DEBUG nextflow.processor.TaskProcessor - <gatk> After stop
+Sep-01 17:02:31.426 [Actor Thread 3] DEBUG nextflow.processor.TaskProcessor - <gatk> Sending poison pills and terminating process
+Sep-01 17:02:31.426 [Actor Thread 3] DEBUG nextflow.Session - <<< barrier arrive (process: gatk)
+Sep-01 17:02:31.426 [Actor Thread 9] INFO  nextflow.processor.TaskProcessor - [d8/34a140] Cached process > platypus (1)
+Sep-01 17:02:31.426 [Actor Thread 12] INFO  nextflow.processor.TaskProcessor - [5e/993b98] Cached process > freebayes (1)
+Sep-01 17:02:31.426 [Actor Thread 14] INFO  nextflow.processor.TaskProcessor - [b8/c927a2] Cached process > delly (1)
+Sep-01 17:02:31.427 [Actor Thread 3] DEBUG nextflow.processor.TaskProcessor - <lumpy> Sending poison pills and terminating process
+Sep-01 17:02:31.427 [Actor Thread 13] DEBUG nextflow.processor.TaskProcessor - <lumpy> After stop
+Sep-01 17:02:31.427 [Actor Thread 3] DEBUG nextflow.Session - <<< barrier arrive (process: lumpy)
+Sep-01 17:02:31.428 [Actor Thread 20] DEBUG nextflow.processor.TaskProcessor - <freebayes> Sending poison pills and terminating process
+Sep-01 17:02:31.428 [Actor Thread 7] DEBUG nextflow.processor.TaskProcessor - <freebayes> After stop
+Sep-01 17:02:31.427 [Actor Thread 19] DEBUG nextflow.processor.TaskProcessor - <platypus> Sending poison pills and terminating process
+Sep-01 17:02:31.428 [Actor Thread 19] DEBUG nextflow.Session - <<< barrier arrive (process: platypus)
+Sep-01 17:02:31.428 [Actor Thread 16] DEBUG nextflow.processor.TaskProcessor - <platypus> After stop
+Sep-01 17:02:31.428 [Actor Thread 20] DEBUG nextflow.Session - <<< barrier arrive (process: freebayes)
+Sep-01 17:02:31.429 [Actor Thread 20] DEBUG nextflow.processor.TaskProcessor - <delly> Sending poison pills and terminating process
+Sep-01 17:02:31.429 [Actor Thread 8] DEBUG nextflow.processor.TaskProcessor - <delly> After stop
+Sep-01 17:02:31.430 [Actor Thread 20] DEBUG nextflow.Session - <<< barrier arrive (process: delly)
+Sep-01 17:02:31.458 [Actor Thread 15] INFO  nextflow.Session - [47/b3c517] Submitted process > pindel (1)
+Sep-01 17:02:31.459 [Actor Thread 11] DEBUG nextflow.processor.TaskProcessor - <pindel> After stop
+Sep-01 17:02:32.747 [Thread-1] ERROR nextflow.processor.TaskProcessor - Error executing process > 'pindel (1)'
 
 Caused by:
-  Missing output file(s) `simulated_genome.bam` expected by process `perform_alignment (1)`
+  Process `pindel (1)` terminated with an error exit status (1)
 
 Command executed:
 
-  mkdir temp
-     bwa mem -t 4 -R '@RG	ID:N2	LB:N2	SM:N2' simulated_genome.fa /Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/data/ECA316_1P.fq.gz /Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/data/ECA316_2P.fq.gz | \
-     sambamba view --nthreads=4 --sam-input --format=bam --with-header /dev/stdin | \
-     sambamba sort --nthreads=4 --show-progress --tmpdir=temp --out=ECA316.bam /dev/stdin
-     sambamba index --nthreads=4 ECA316.bam
+  echo 'ECA316.bam     300   pindel_output' >pindelconfig.txt
+  link="$(readlink simulated_genome.fa)"
+  rm simulated_genome.fa
+  ls -la
+  cp "${link}" .
+  docker run opengenomics/pindel pindel -f ./simulated_genome.fa -i ./pindelconfig.txt -c ALL -o ./pindel_output
+  docker run opengenomics/pindel pindel2vcf -P ./pindel_output -r ./simulated_genome.fa -R simulated -d 2017
 
 Command exit status:
-  0
+  1
 
 Command output:
-  (empty)
+  total 80
+  drwxr-xr-x  18 stefan  staff   612 Sep  1 17:02 .
+  drwxr-xr-x   3 stefan  staff   102 Sep  1 17:02 ..
+  -rw-r--r--   1 stefan  staff     0 Sep  1 17:02 .command.begin
+  -rw-r--r--   1 stefan  staff     0 Sep  1 17:02 .command.err
+  -rw-r--r--   1 stefan  staff     0 Sep  1 17:02 .command.log
+  -rw-r--r--   1 stefan  staff     0 Sep  1 17:02 .command.out
+  prw-r--r--   1 stefan  staff     0 Sep  1 17:02 .command.pe
+  prw-r--r--   1 stefan  staff     0 Sep  1 17:02 .command.po
+  -rw-r--r--   1 stefan  staff  3380 Sep  1 17:02 .command.run
+  -rw-r--r--   1 stefan  staff   378 Sep  1 17:02 .command.sh
+  lrwxr-xr-x   1 stefan  staff   109 Sep  1 17:02 ECA316.bam -> /Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/work/d3/2304eca4f8705ce6d15daa79af5239/ECA316.bam
+  lrwxr-xr-x   1 stefan  staff   113 Sep  1 17:02 ECA316.bam.bai -> /Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/work/d3/2304eca4f8705ce6d15daa79af5239/ECA316.bam.bai
+  lrwxr-xr-x   1 stefan  staff   118 Sep  1 17:02 indel_positions.tsv -> /Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/work/0e/9f5dfdcb628be882cc29dc1cedeb93/indel_positions.tsv
+  -rw-r--r--   1 stefan  staff    35 Sep  1 17:02 pindelconfig.txt
+  lrwxr-xr-x   1 stefan  staff   122 Sep  1 17:02 simulated_genome.fa.bwt -> /Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/work/6a/e2fec0cbf06fc363df82fbe5498ac7/simulated_genome.fa.bwt
+  lrwxr-xr-x   1 stefan  staff   122 Sep  1 17:02 simulated_genome.fa.fai -> /Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/work/6a/e2fec0cbf06fc363df82fbe5498ac7/simulated_genome.fa.fai
+  lrwxr-xr-x   1 stefan  staff   122 Sep  1 17:02 simulated_genome.fa.pac -> /Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/work/6a/e2fec0cbf06fc363df82fbe5498ac7/simulated_genome.fa.pac
+  lrwxr-xr-x   1 stefan  staff   121 Sep  1 17:02 simulated_genome.fa.sa -> /Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/work/6a/e2fec0cbf06fc363df82fbe5498ac7/simulated_genome.fa.sa
+  Initializing parameters...
+  Pindel version 0.2.5b8, 20151210.
+  Loading reference genome ...
+  Error: fasta line starts with  instead of '>'. Aborting.
 
-Command error:
-  [bwt_restore_sa] fail to open file 'simulated_genome.fa.sa' : No such file or directory
-  Writing sorted chunks to temporary directory...
-  [                                                                              ]
-  [==============================================================================]
+Command wrapper:
+  total 80
+  drwxr-xr-x  18 stefan  staff   612 Sep  1 17:02 .
+  drwxr-xr-x   3 stefan  staff   102 Sep  1 17:02 ..
+  -rw-r--r--   1 stefan  staff     0 Sep  1 17:02 .command.begin
+  -rw-r--r--   1 stefan  staff     0 Sep  1 17:02 .command.err
+  -rw-r--r--   1 stefan  staff     0 Sep  1 17:02 .command.log
+  -rw-r--r--   1 stefan  staff     0 Sep  1 17:02 .command.out
+  prw-r--r--   1 stefan  staff     0 Sep  1 17:02 .command.pe
+  prw-r--r--   1 stefan  staff     0 Sep  1 17:02 .command.po
+  -rw-r--r--   1 stefan  staff  3380 Sep  1 17:02 .command.run
+  -rw-r--r--   1 stefan  staff   378 Sep  1 17:02 .command.sh
+  lrwxr-xr-x   1 stefan  staff   109 Sep  1 17:02 ECA316.bam -> /Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/work/d3/2304eca4f8705ce6d15daa79af5239/ECA316.bam
+  lrwxr-xr-x   1 stefan  staff   113 Sep  1 17:02 ECA316.bam.bai -> /Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/work/d3/2304eca4f8705ce6d15daa79af5239/ECA316.bam.bai
+  lrwxr-xr-x   1 stefan  staff   118 Sep  1 17:02 indel_positions.tsv -> /Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/work/0e/9f5dfdcb628be882cc29dc1cedeb93/indel_positions.tsv
+  -rw-r--r--   1 stefan  staff    35 Sep  1 17:02 pindelconfig.txt
+  lrwxr-xr-x   1 stefan  staff   122 Sep  1 17:02 simulated_genome.fa.bwt -> /Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/work/6a/e2fec0cbf06fc363df82fbe5498ac7/simulated_genome.fa.bwt
+  lrwxr-xr-x   1 stefan  staff   122 Sep  1 17:02 simulated_genome.fa.fai -> /Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/work/6a/e2fec0cbf06fc363df82fbe5498ac7/simulated_genome.fa.fai
+  lrwxr-xr-x   1 stefan  staff   122 Sep  1 17:02 simulated_genome.fa.pac -> /Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/work/6a/e2fec0cbf06fc363df82fbe5498ac7/simulated_genome.fa.pac
+  lrwxr-xr-x   1 stefan  staff   121 Sep  1 17:02 simulated_genome.fa.sa -> /Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/work/6a/e2fec0cbf06fc363df82fbe5498ac7/simulated_genome.fa.sa
+  Initializing parameters...
+  Pindel version 0.2.5b8, 20151210.
+  Loading reference genome ...
+  Error: fasta line starts with  instead of '>'. Aborting.
 
 Work dir:
-  /Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/work/19/2ae6e6674537d1b404032ab600745d
+  /Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/work/47/b3c517248da6a4c870c3754d16ccf0
 
 Tip: view the complete command output by changing to the process work dir and entering the command: 'cat .command.out'
-Aug-24 16:28:29.544 [Thread-1] DEBUG nextflow.Session - Session aborted -- Cause: Missing output file(s) `simulated_genome.bam` expected by process `perform_alignment (1)`
-Aug-24 16:28:29.552 [Actor Thread 8] DEBUG nextflow.processor.TaskProcessor - <perform_alignment> Sending poison pills and terminating process
-Aug-24 16:28:29.553 [Actor Thread 8] DEBUG nextflow.Session - <<< barrier arrive (process: perform_alignment)
-Aug-24 16:28:29.553 [Thread-1] DEBUG n.processor.TaskPollingMonitor - <<< barrier arrives (monitor: local)
-Aug-24 16:28:29.554 [main] DEBUG nextflow.Session - Session await > all process finished
-Aug-24 16:28:29.554 [main] DEBUG nextflow.Session - Session await > all barriers passed
-Aug-24 16:28:29.591 [main] DEBUG nextflow.script.ScriptRunner - > Execution complete -- Goodbye
+Sep-01 17:02:32.750 [Actor Thread 20] DEBUG nextflow.processor.TaskProcessor - <pindel> Sending poison pills and terminating process
+Sep-01 17:02:32.750 [Actor Thread 20] DEBUG nextflow.Session - <<< barrier arrive (process: pindel)
+Sep-01 17:02:32.750 [main] DEBUG nextflow.Session - Session await > all process finished
+Sep-01 17:02:32.750 [Thread-1] DEBUG nextflow.Session - Session aborted -- Cause: Process `pindel (1)` terminated with an error exit status (1)
+Sep-01 17:02:32.752 [Thread-1] DEBUG n.processor.TaskPollingMonitor - <<< barrier arrives (monitor: local)
+Sep-01 17:02:32.752 [main] DEBUG nextflow.Session - Session await > all barriers passed
+Sep-01 17:02:32.784 [main] DEBUG nextflow.script.ScriptRunner - > Execution complete -- Goodbye

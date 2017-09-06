@@ -1,0 +1,85 @@
+# run platypus
+
+python ~/Indels/Platypus_0.8.1/Platypus.py callVariants --bamFiles=ECA316.bam --refFile=simulated_genome.fa --output=platypus_test_output.vcf
+
+gzip platypus_test_output.vcf
+
+vcftools --gzvcf platypus_test_output.vcf.gz --remove-filtered-all --recode --stdout | gzip -c > platypus_output_PASS_only.vcf.gz
+
+vcftools --gzvcf platypus_test_output.vcf.gz --remove-filtered-all --recode --out platypus_output_PASS_only
+
+
+# freebayes (easy install from github)
+
+freebayes --fasta-reference simulated_genome.fa ECA316.bam | vcffilter -f "QUAL > 20" > freebayes_output.vcf 
+
+
+# GATK
+
+# might need to do java -jar picard on cluster 
+
+picard CreateSequenceDictionary R=simulated_genome.fa O=simulated_genome.dict
+
+java -jar ../GenomeAnalysisTK-3.7/GenomeAnalysisTK.jar \
+     -R simulated_genome.fa \
+     -T HaplotypeCaller \
+     -I ECA316.bam \
+     --emitRefConfidence GVCF \
+     -o GATK_output.vcf \
+     -variant_index_type LINEAR \
+     -variant_index_parameter 128000
+
+
+# bcftools - straight forward enough
+
+bcftools mpileup -f simulated_genome.fa ECA316.bam | bcftools call -mv -Ov -o bcftools_output.bcf
+
+# delly - need to run insertions and deletions separately - incorporate this into pipeline for deletions or insertions
+
+delly call -t DEL -g simulated_genome.fa -o delly_output_deletion.bcf ECA316.bam
+bcftools convert -Ov -o delly_output_deletion.vcf delly_output_deletion.bcf
+
+
+# lumpy 
+
+# Extract the discordant paired-end alignments.
+samtools view -b -F 1294 ECA316.bam > ECA316.discordants.unsorted.bam
+
+# Extract the split-read alignments
+samtools view -h ECA316.bam \
+    | /Users/stefan/AndersenLab/Github_Repos/lumpy-sv/scripts/extractSplitReads_BwaMem -i stdin \
+    | samtools view -Sb - \
+    > ECA316.splitters.unsorted.bam
+
+# Sort both alignments
+samtools sort -o ECA316.discordants.bam ECA316.discordants.unsorted.bam 
+samtools sort -o ECA316.splitters.bam ECA316.splitters.unsorted.bam 
+
+lumpyexpress \
+    -B ECA316.bam \
+    -S ECA316.splitters.bam \
+    -D ECA316.discordants.bam \
+    -o lumpexpress_output.vcf
+
+# pindel - need to make a config file that contains a list of .bam files expected insert size and output
+
+./pindel -f <reference.fa> -p <pindel_input> [and/or -i bam_configuration_file] -c <chromosome_name> -o <prefix_for_output_files>
+
+docker run -it --rm -v ${PWD}:/opt opengenomics/pindel pindel -f simulated_genome.fa -i pindelconfig.txt -c ALL -o pindel_eca316
+#pindel2vcf
+docker run -it --rm -v ${PWD}:/opt opengenomics/pindel pindel2vcf -P pindel_eca316 -r simulated_genome.fa -R simulated -d 2017
+
+
+# # # # # ## # # #  # RIAIL TRANSPOSON STUFF
+
+  # # # # # extract split reads
+
+  samtools view -h ECA316.bam \
+    | /Users/stefan/AndersenLab/Github_Repos/lumpy-sv/scripts/extractSplitReads_BwaMem -i stdin \
+    > split_reads.txt
+  
+
+# Extract the discordant paired-end alignments.
+
+samtools view -F 1294 ECA316.bam > discordant_reads.txt
+samtools view -F 3842 ECA316.bam > discordant_reads.txt
