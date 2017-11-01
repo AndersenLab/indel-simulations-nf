@@ -1,269 +1,387 @@
+#!/usr/bin/env nextflow 
+fastqdir = config.fastqdir
+input_fasta = config.input_fasta
+alignment_cores = config.alignment_cores
+sample_id = config.sample_id
+sambamba = config.sambamba
+platypus = config.platypus
+lumpy_extract_split = config.lumpy_extract_split
+gatkdir = config.gatkdir
+picarddir = config.picarddir
+indel_simulator = config.indel_simulator
 
-
-//input_fasta = file("/projects/b1059/data/genomes/c_elegans/WS245/WS245.tmp.fa")
-input_fasta = "/Users/stefan/Indels/c_elegans.PRJNA13758.WS245.genomic.fa"
-input_fastq1 = "/Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/data/ECA316_1P.fq.gz"
-input_fastq2 = "/Users/stefan/AndersenLab/Github_Repos/indel-simulations-nf/data/ECA316_2P.fq.gz"
-alignment_cores = 4
-sample_id = "ECA316"
-
-//indel = Channel.from(['insertion', 'deletion'])
-//size = Channel.from(['1,10', '11,100','101,1000','1001,20000'])
-indel = Channel.from(['deletion'])
-size = Channel.from(['1,10'])
+// Define ranges of indel sizes
+indel = Channel.from(['insertion', 'deletion'])
+size = Channel.from(['1 10', '11 100','101 1000','1001 20000'])
 
 indel.spread(size).into { out_use; out_print}
 
-//out_print.subscribe { println it }
+// Initialize channels to input fastq files
+id = Channel.create()
+fq1 = Channel.create()
+fq2 = Channel.create()
 
-process rsvsim {
+// load FASTQ files into fastq_pairs
+Channel
+        .fromFilePairs(fastqdir, flat: true)
+        .ifEmpty { exit 1, "Read pairs could not be found: ${fastqdir}" }
+        .separate( id, fq1, fq2)
 
-	echo true
 
-	tag { "${size} - ${indel}" }
+// combine fastq files 
+process conc {
+     
+    echo true
 
     input:
-       set indel, size from out_use
+    val fqs1 from fq1.toSortedList()
+    val fqs2 from fq2.toSortedList()
+
+    output:
+    set file('fq1.fq.gz'), file('fq2.fq.gz') into fq_pairs_combined
+ 
+    script:
+    """
+    zcat ${fqs1.join(' ')} | gzip > fq1.fq.gz
+    zcat ${fqs2.join(' ')} | gzip > fq2.fq.gz
+    """
+}
+
+// simulate indels
+process simulate {
+
+    //publishDir "results/${indel}/${size}", mode: 'copy'
+
+    tag { "${size} - ${indel}" }
+
+    input:
+        set indel, size from out_use
   
     output:
-    	set file('indel_positions.tsv'), file('simulated_genome.fa'), indel, size into variant_positions
+        set file('indel_positions.tsv'), file('simulated_genome.fa'), indel, size into variant_positions
 
-    """
-    #!/usr/bin/env Rscript --vanilla
-
-    library(readr)
-    library(RSVSim)
-	library(Biostrings)
-
-    range <- strsplit("${size}", ",")
-
-	small_bound <- as.numeric(range[[1]][1])
-	large_bound <- as.numeric(range[[1]][2])
-
-	if("${indel}" == "insertion"){
-		simulated_genome <- simulateSV(output = NA, genome = "${input_fasta}" , 
-                   dels = 10, 
-                   sizeDels = sample(seq(small_bound,large_bound, by = 1), size = 1000, replace = T))
-
-                   readr::write_tsv(metadata(simulated_genome)[[1]], 'indel_positions.tsv')
-                   Biostrings::writeXStringSet(simulated_genome,'simulated_genome.fa')
-
-	} else {
-		simulated_genome <- simulateSV(output = NA, genome = "${input_fasta}", 
-                   dels = 10, 
-                   sizeDels = sample(seq(small_bound,large_bound, by = 1), size = 1000, replace = T)) 
-
-                   readr::write_tsv(metadata(simulated_genome)[[1]], 'indel_positions.tsv')
-                   Biostrings::writeXStringSet(simulated_genome,'simulated_genome.fa')
-	}
-
-    """
+    "python ${indel_simulator} -g ${input_fasta} -i $indel -r $size -n 1000 -l 200"
 }
 
+// index simulated genome
 process index_simulated_genome {
 
-	echo true
+    echo true
 
     input:
-        set file(indel_positions), file(simulated_genome), indel, size from variant_positions
+        set file(indel_positions), file('simulated_genome.fa'), indel, size from variant_positions
     output:
-    	set file(indel_positions), file(simulated_genome), indel, size, file('simulated_genome.fa.fai'), file('simulated_genome.fa.amb'), file('simulated_genome.fa.ann'), file('simulated_genome.fa.bwt'), file('simulated_genome.fa.pac'), file('simulated_genome.fa.sa') into sim_index
+        set file('indel_positions.bed'), indel, size, file("simulated_genome.fa"), file('simulated_genome.fa.fai'), file('simulated_genome.fa.amb'), file('simulated_genome.fa.ann'), file('simulated_genome.fa.bwt'), file('simulated_genome.fa.pac'), file('simulated_genome.fa.sa') into indexed_simulated_genome
 
     
     """
-    	bwa index -a bwtsw ${simulated_genome}
-    	samtools faidx ${simulated_genome}
+        bwa index -a bwtsw simulated_genome.fa
+        samtools faidx simulated_genome.fa
+        tail -n +2 indel_positions.tsv | sort -k 1,1 -k 2,2n | grep -vwE MtDNA > indel_positions.bed
     """
 }
 
-
+// align reads to simulated genome
 process perform_alignment {
 
-	echo true
+    echo true
 
     input:
-        set file(indel_positions), file(simulated_genome), indel, size, file('simulated_genome.fa.fai'),file('simulated_genome.fa.amb'), file('simulated_genome.fa.ann'), file('simulated_genome.fa.bwt'), file('simulated_genome.fa.pac'), file('simulated_genome.fa.sa') from sim_index
+        set file('indel_positions.bed'), indel, size, file("simulated_genome.fa"), file('simulated_genome.fa.fai'), file('simulated_genome.fa.amb'), file('simulated_genome.fa.ann'), file('simulated_genome.fa.bwt'), file('simulated_genome.fa.pac'), file('simulated_genome.fa.sa') from indexed_simulated_genome
+        set file('fq1.fq.gz'), file('fq2.fq.gz') from fq_pairs_combined
     output:
-    	set file(indel_positions), file(simulated_genome), indel, size, file('ECA316.bam'), file('ECA316.bam.bai'), file('simulated_genome.fa.fai'), file('simulated_genome.fa.bwt'), file('simulated_genome.fa.pac'), file('simulated_genome.fa.sa') into fq_to_bam
-
+        set file('indel_positions.bed'), indel, size, file("simulated_genome.fa"), file('simulated_genome.fa.fai'), file('simulated_genome.fa.amb'), file('simulated_genome.fa.ann'), file('simulated_genome.fa.bwt'), file('simulated_genome.fa.pac'), file('simulated_genome.fa.sa'), file('N2.bam'), file('N2.bam.bai') into aligned_bam_bai
     
     """
-    	mkdir temp
-        bwa mem -t ${alignment_cores} -R '@RG\tID:N2\tLB:N2\tSM:N2' ${simulated_genome} ${input_fastq1} ${input_fastq2} | \\
-        sambamba view --nthreads=${alignment_cores} --sam-input --format=bam --with-header /dev/stdin | \\
-        sambamba sort --nthreads=${alignment_cores} --show-progress --tmpdir=temp --out=${sample_id}.bam /dev/stdin
-        sambamba index --nthreads=${alignment_cores} ${sample_id}.bam
+        bwa mem -t ${alignment_cores} -R '@RG\tID:N2\tLB:N2\tSM:N2\tPL:ILLUMINA' simulated_genome.fa fq1.fq.gz fq2.fq.gz | \\
+        ${sambamba} view --nthreads=${alignment_cores} --sam-input --format=bam --with-header /dev/stdin | \\
+        ${sambamba} sort --nthreads=${alignment_cores} --show-progress --tmpdir=temp --out=${sample_id}.bam /dev/stdin
+        ${sambamba} index --nthreads=${alignment_cores} ${sample_id}.bam
     """
 }
 
-//split fq_to_bam into multiple channels for variant calling
-fq_to_bam.into { platypus_files; freebayes_files; gatk_files; bcftools_files; pindel_files; delly_files; lumpy_files; post_caller_process_files }
-
-process platypus {
-
-	echo true
-
-    input:
-        set file(indel_positions), file(simulated_genome), indel, size, file('ECA316.bam'), file('ECA316.bam.bai'), file('simulated_genome.fa.fai'), file('simulated_genome.fa.bwt'), file('simulated_genome.fa.pac'), file('simulated_genome.fa.sa') from platypus_files
-    output:
-    	set file('platypus_output.vcf') into platypus_vcf
 
 
-	    """
-	    python ~/Indels/Platypus_0.8.1/Platypus.py callVariants --bamFiles=ECA316.bam --refFile=${simulated_genome} --output=platypus_output.vcf
 
-    	"""
-}
+process gatk_base_recalibrate {
 
+    echo true
 
-process freebayes {
-
-	echo true
+    publishDir "results/${indel}/${size}/plots", mode: 'copy', pattern: '*.pdf'
 
     input:
-        set file(indel_positions), file(simulated_genome), indel, size, file('ECA316.bam'), file('ECA316.bam.bai'), file('simulated_genome.fa.fai'), file('simulated_genome.fa.bwt'), file('simulated_genome.fa.pac'), file('simulated_genome.fa.sa') from freebayes_files
+        set file('indel_positions.bed'), indel, size, file("simulated_genome.fa"), file('simulated_genome.fa.fai'), file('simulated_genome.fa.amb'), file('simulated_genome.fa.ann'), file('simulated_genome.fa.bwt'), file('simulated_genome.fa.pac'), file('simulated_genome.fa.sa'), file('N2.bam'), file('N2.bam.bai') from aligned_bam_bai
     output:
-    	set file('freebayes_output.vcf') into freebayes_vcf
+        set file('indel_positions.bed'), indel, size, file("simulated_genome.fa"), file('simulated_genome.fa.fai'), file('simulated_genome.fa.amb'), file('simulated_genome.fa.ann'), file('simulated_genome.fa.bwt'), file('simulated_genome.fa.pac'), file('simulated_genome.fa.sa'), file('N2.bam'), file('N2.bam.bai'), file('N2_recald.bam'), file('N2_recald.bai'), file('simulated_genome.dict') into gatk_recalibrated
+        file('recalibration_plots.pdf') into gatk_recalibrated_images
 
+        """
+        java -jar ${picarddir} CreateSequenceDictionary R=simulated_genome.fa O=simulated_genome.dict
 
-	    """
-	    freebayes --fasta-reference simulated_genome.fa ECA316.bam | vcffilter -f "QUAL > 20" > freebayes_output.vcf 
-    	"""
+        java -jar /software/gatk/3.7.0/GenomeAnalysisTK.jar \
+            -T BaseRecalibrator \
+            -R simulated_genome.fa \
+            -I N2.bam \
+            -L I:2000000-12000000 \
+            -knownSites indel_positions.bed \
+            -o recal_data.table 
+
+        java -jar /software/gatk/3.7.0/GenomeAnalysisTK.jar \
+            -T BaseRecalibrator \
+            -R simulated_genome.fa \
+            -I N2.bam \
+            -L I:2000000-12000000 \
+            -knownSites indel_positions.bed \
+            -BQSR recal_data.table  \
+            -o post_recal_data.table 
+
+        java -jar ${gatkdir} \
+            -T AnalyzeCovariates \
+            -R simulated_genome.fa \
+            -L I:2000000-12000000 \
+            -before recal_data.table \
+            -after post_recal_data.table \
+            -plots recalibration_plots.pdf
+
+        java -jar /software/gatk/3.7.0/GenomeAnalysisTK.jar \
+            -T PrintReads \
+            -R simulated_genome.fa \
+            -I N2.bam \
+            -BQSR recal_data.table \
+            --defaultBaseQualities 0 \
+            -o N2_recald.bam 
+        """
 }
 
-process gatk {
+gatk_recalibrated.into {gatk_recalibrated_gatk;
+                        gatk_recalibrated_platypus;
+                        gatk_recalibrated_freebayes;
+                        gatk_recalibrated_gridss;
+                        gatk_recalibrated_delly;
+                        gatk_recalibrated_lumpy;
+                        gatk_recalibrated_bcftools;
+                        gatk_recalibrated_post_caller1;
+                        gatk_recalibrated_post_caller2}
 
-	echo true
+
+
+process gatk_call {
+
+    echo true
+
+    publishDir "results/${indel}/${size}", mode: 'copy'
 
     input:
-        set file(indel_positions), file(simulated_genome), indel, size, file('ECA316.bam'), file('ECA316.bam.bai'), file('simulated_genome.fa.fai'), file('simulated_genome.fa.bwt'), file('simulated_genome.fa.pac'), file('simulated_genome.fa.sa') from gatk_files
+        set file('indel_positions.bed'), indel, size, file("simulated_genome.fa"), file('simulated_genome.fa.fai'), file('simulated_genome.fa.amb'), file('simulated_genome.fa.ann'), file('simulated_genome.fa.bwt'), file('simulated_genome.fa.pac'), file('simulated_genome.fa.sa'), file('N2.bam'), file('N2.bam.bai'), file('N2_recald.bam'), file('N2_recald.bai'), file('simulated_genome.dict') from gatk_recalibrated_gatk
     output:
-    	set file('gatk_output.vcf') into gatk_vcf
+        set file("gatk_output_indel.vcf"), file("gatk_output_indel.vcf.idx"), file("gatk_window.tsv"), file("gatk_output_indel.tsv") into gatk_vcf
+
+        """
+        java -jar /software/gatk/3.7.0/GenomeAnalysisTK.jar \
+            -T HaplotypeCaller \
+            -R simulated_genome.fa \
+            -I N2_recald.bam \
+            --genotyping_mode DISCOVERY \
+            -stand_call_conf 30 \
+            --sample_ploidy 1 \
+            -o gatk_output.vcf
+
+        java -jar /software/gatk/3.7.0/GenomeAnalysisTK.jar \
+           -R simulated_genome.fa \
+           -T SelectVariants \
+           -V gatk_output.vcf \
+           -o gatk_output_indel.vcf \
+           -selectType INDEL
 
 
-	    """
-	    picard CreateSequenceDictionary R=simulated_genome.fa O=simulated_genome.dict
-	    java -jar /Users/stefan/Indels/GenomeAnalysisTK-3.7/GenomeAnalysisTK.jar \
-     	-R simulated_genome.fa \
-     	-T HaplotypeCaller \
-     	-I ECA316.bam \
-     	--emitRefConfidence GVCF \
-     	-o gatk_output.vcf \
-     	-variant_index_type LINEAR \
-     	-variant_index_parameter 128000
-    	"""
+
+        convert2bed --input=vcf --output=bed <gatk_output_indel.vcf> gatk_output.bed
+
+        bedtools window -a indel_positions.bed -b gatk_output.bed -w 100 > gatk_window.tsv
+
+        vk vcf2tsv wide --print-header gatk_output_indel.vcf > gatk_output_indel.tsv
+
+        """
 }
 
-process bcftools {
-		echo true
+process platypus_call {
+
+    echo true
+
+    publishDir "results/${indel}/${size}", mode: 'copy'
 
     input:
-        set file(indel_positions), file(simulated_genome), indel, size, file('ECA316.bam'), file('ECA316.bam.bai'), file('simulated_genome.fa.fai'), file('simulated_genome.fa.bwt'), file('simulated_genome.fa.pac'), file('simulated_genome.fa.sa') from bcftools_files
+        set file('indel_positions.bed'), indel, size, file("simulated_genome.fa"), file('simulated_genome.fa.fai'), file('simulated_genome.fa.amb'), file('simulated_genome.fa.ann'), file('simulated_genome.fa.bwt'), file('simulated_genome.fa.pac'), file('simulated_genome.fa.sa'), file('N2.bam'), file('N2.bam.bai'), file('N2_recald.bam'), file('N2_recald.bai'), file('simulated_genome.dict') from gatk_recalibrated_platypus
     output:
-    	set file('bcftools_output.vcf') into bcftools_vcf
+        set file('platypus_output.vcf'), file("platypus_window.tsv"), file("platypus_output.tsv") into platypus_vcf
 
 
-	    """
-		bcftools mpileup -f simulated_genome.fa ECA316.bam | bcftools call -mv -Ov -o bcftools_output.bcf
-		bcftools convert -Ov -o bcftools_output.vcf bcftools_output.bcf
-    	"""
+        """
+        python ${platypus} callVariants --nCPU=${alignment_cores} --bamFiles=N2_recald.bam --assemble=1 --refFile=simulated_genome.fa --output=platypus_output.vcf
+
+        convert2bed --input=vcf --output=bed <platypus_output.vcf> platypus_output.bed
+
+        bedtools window -a indel_positions.bed -b platypus_output.bed -w 100 > platypus_window.tsv
+
+        vk vcf2tsv wide --print-header platypus_output.vcf > platypus_output.tsv
+        """
 }
 
-process delly {
-		echo true
+process freebayes_call {
+
+    echo true
+
+    publishDir "results/${indel}/${size}", mode: 'copy'
 
     input:
-        set file(indel_positions), file(simulated_genome), indel, size, file('ECA316.bam'), file('ECA316.bam.bai'), file('simulated_genome.fa.fai'), file('simulated_genome.fa.bwt'), file('simulated_genome.fa.pac'), file('simulated_genome.fa.sa') from delly_files
+        set file('indel_positions.bed'), indel, size, file("simulated_genome.fa"), file('simulated_genome.fa.fai'), file('simulated_genome.fa.amb'), file('simulated_genome.fa.ann'), file('simulated_genome.fa.bwt'), file('simulated_genome.fa.pac'), file('simulated_genome.fa.sa'), file('N2.bam'), file('N2.bam.bai'), file('N2_recald.bam'), file('N2_recald.bai'), file('simulated_genome.dict') from gatk_recalibrated_freebayes
     output:
-    	set file('delly_output.vcf') into delly_vcf
+        set file('freebayes_output.vcf'), file("freebayes_window.tsv"), file("freebayes_output.tsv") into freebayes_vcf
 
-    	script:
-    	if( indel == 'deletion')
-	    """
-		delly call -t DEL -g simulated_genome.fa -o delly_output.bcf ECA316.bam
-		bcftools convert -Ov -o delly_output.vcf delly_output.bcf
-    	"""
-    	else
-    	"""
-		delly call -t DEL -g simulated_genome.fa -o delly_output.bcf ECA316.bam
-		bcftools convert -Ov -o delly_output.vcf delly_output.bcf
-    	"""
 
+        """
+        freebayes --fasta-reference simulated_genome.fa --ploidy 1 N2_recald.bam > freebayes_output.vcf 
+
+        convert2bed --input=vcf --output=bed <freebayes_output.vcf> freebayes_output.bed
+
+        bedtools window -a indel_positions.bed -b freebayes_output.bed -w 100 > freebayes_window.tsv
+
+        vk vcf2tsv wide --print-header freebayes_output.vcf > freebayes_output.tsv
+        """
 }
 
-process lumpy{
+process gridss_call {
 
-	echo true
+    echo true
+
+    publishDir "results/${indel}/${size}", mode: 'copy'
 
     input:
-        set file(indel_positions), file(simulated_genome), indel, size, file('ECA316.bam'), file('ECA316.bam.bai'), file('simulated_genome.fa.fai'), file('simulated_genome.fa.bwt'), file('simulated_genome.fa.pac'), file('simulated_genome.fa.sa') from lumpy_files
+        set file('indel_positions.bed'), indel, size, file("simulated_genome.fa"), file('simulated_genome.fa.fai'), file('simulated_genome.fa.amb'), file('simulated_genome.fa.ann'), file('simulated_genome.fa.bwt'), file('simulated_genome.fa.pac'), file('simulated_genome.fa.sa'), file('N2.bam'), file('N2.bam.bai'), file('N2_recald.bam'), file('N2_recald.bai'), file('simulated_genome.dict') from gatk_recalibrated_gridss
     output:
-    	set file('lumpy_output.vcf') into lumpy_vcf
-	    
+        set file('gridss_output.sv.vcf'), file("gridss_window.tsv"), file("gridss_output.tsv") into gridss_vcf
+        
 
-	    """
-		samtools view -b -F 1294 ECA316.bam > ECA316.discordants.unsorted.bam
-		samtools view -h ECA316.bam \
-    	| /Users/stefan/AndersenLab/Github_Repos/lumpy-sv/scripts/extractSplitReads_BwaMem -i stdin \
-    	| samtools view -Sb - \
-    	> ECA316.splitters.unsorted.bam
+        """
+        java -ea -Xmx31g -Dsamjdk.create_index=true \
+            -Dsamjdk.use_async_io_read_samtools=true \
+            -Dsamjdk.use_async_io_write_samtools=true \
+            -Dsamjdk.use_async_io_write_tribble=true \
+            -cp /projects/b1059/software/gridss-1.4.3-jar-with-dependencies.jar gridss.CallVariants \
+            REFERENCE_SEQUENCE=simulated_genome.fa \
+            TMP_DIR=. \
+            WORKING_DIR=. \
+            INPUT=N2_recald.bam \
+            OUTPUT=gridss_output.sv.vcf \
+            ASSEMBLY=gridss_output.gridss.assembly.bam
 
-    	samtools sort -o ECA316.discordants.bam ECA316.discordants.unsorted.bam 
-		samtools sort -o ECA316.splitters.bam ECA316.splitters.unsorted.bam 
+        convert2bed --input=vcf --output=bed <gridss_output.sv.vcf> gridss_output.bed
 
-		lumpyexpress \
-    	-B ECA316.bam \
-    	-S ECA316.splitters.bam \
-    	-D ECA316.discordants.bam \
-    	-o lumpy_output.vcf
-    	"""
+        bedtools window -a indel_positions.bed -b gridss_output.bed -w 100 > gridss_window.tsv
+
+        vk vcf2tsv wide --print-header gridss_output.sv.vcf > gridss_output.tsv        
+        """
 
 }
 
-//process pindel {
-//	echo true
-//
-//   input:
-//        set file(indel_positions), file(simulated_genome), indel, size, file('ECA316.bam'), file('ECA316.bam.bai'), file('simulated_genome.fa.fai'), file('simulated_genome.fa.bwt'), file('simulated_genome.fa.pac'), file('simulated_genome.fa.sa') from pindel_files
-//    output:
-//    	set file('pindel_output.vcf') into pindel_vcf
-//
-//
-//    	"""
-//    	echo 'ECA316.bam     300   pindel_output' >pindelconfig.txt
-//    	link="\$(readlink simulated_genome.fa)"
-//    	rm simulated_genome.fa
-//    	ls -la
-//    	cp "\${link}" .
-//    	docker run opengenomics/pindel pindel -f ./simulated_genome.fa -i ./pindelconfig.txt -c ALL -o ./pindel_output
-//    	docker run opengenomics/pindel pindel2vcf -P ./pindel_output -r ./simulated_genome.fa -R simulated -d 2017
-//    	"""
-//}
+process delly_call {
+        
+    echo true
 
-process generate_tsv {
-
-	echo true
+    publishDir "results/${indel}/${size}", mode: 'copy'
 
     input:
-    	set file('platypus_output.vcf') from platypus_vcf
-    	set file('freebayes_output.vcf') from freebayes_vcf
-    	set file('gatk_output.vcf') from gatk_vcf
-    	set file('bcftools_output.vcf') from bcftools_vcf
-    	set file('delly_output.vcf') from delly_vcf
-        set file('lumpy_output.vcf') from lumpy_vcf
-
+        set file('indel_positions.bed'), indel, size, file("simulated_genome.fa"), file('simulated_genome.fa.fai'), file('simulated_genome.fa.amb'), file('simulated_genome.fa.ann'), file('simulated_genome.fa.bwt'), file('simulated_genome.fa.pac'), file('simulated_genome.fa.sa'), file('N2.bam'), file('N2.bam.bai'), file('N2_recald.bam'), file('N2_recald.bai'), file('simulated_genome.dict') from gatk_recalibrated_delly
     output:
-    	set file('platypus_output.tsv'), file('freebayes_output.tsv'), file('GATK_output.tsv'), file('bcftools_output.tsv'), file('delly_output.tsv'), file('lumpy_output.tsv') into all_tsv_outputs
+        set file('delly_output.vcf'), file("delly_window.tsv"), file("delly_output.tsv") into delly_vcf
 
+        script:
+        if( indel == 'deletion')
+        """
+        delly call -t INS -g simulated_genome.fa -o delly_output.bcf N2_recald.bam
+        bcftools convert -Ov -o delly_output.vcf delly_output.bcf
 
-	    """
-	    vcf2tsv platypus_output.vcf -g > platypus_output.tsv
-	    vcf2tsv freebayes_output.vcf -g > freebayes_output.tsv
-	    vcf2tsv GATK_output.vcf -g > GATK_output.tsv
-	    vcf2tsv bcftools_output.vcf -g > bcftools_output.tsv
-		vcf2tsv delly_output.vcf -g > delly_output.tsv
-		vcf2tsv lumpy_output.vcf -g > lumpy_output.tsv
-    	"""
+        convert2bed --input=vcf --output=bed <delly_output.vcf> delly_output.bed
 
+        bedtools window -a indel_positions.bed -b delly_output.bed -w 100 > delly_window.tsv
+
+        vk vcf2tsv wide --print-header delly_output.vcf > delly_output.tsv 
+        """
+        else
+        """
+        delly call -t DEL -g simulated_genome.fa -o delly_output.bcf N2_recald.bam
+        bcftools convert -Ov -o delly_output.vcf delly_output.bcf
+
+        convert2bed --input=vcf --output=bed <delly_output.vcf> delly_output.bed
+
+        bedtools window -a indel_positions.bed -b delly_output.bed -w 100 > delly_window.tsv
+
+        vk vcf2tsv wide --print-header delly_output.vcf > delly_output.tsv 
+        """
 
 }
+
+process lumpy_call {
+
+    echo true
+
+    publishDir "results/${indel}/${size}", mode: 'copy'
+
+    input:
+        set file('indel_positions.bed'), indel, size, file("simulated_genome.fa"), file('simulated_genome.fa.fai'), file('simulated_genome.fa.amb'), file('simulated_genome.fa.ann'), file('simulated_genome.fa.bwt'), file('simulated_genome.fa.pac'), file('simulated_genome.fa.sa'), file('N2.bam'), file('N2.bam.bai'), file('N2_recald.bam'), file('N2_recald.bai'), file('simulated_genome.dict') from gatk_recalibrated_lumpy
+    output:
+        set file('lumpy_output.vcf'), file("lumpy_window.tsv"), file("lumpy_output.tsv") into lumpy_vcf
+        
+
+        """
+        samtools view -b -F 1294 N2_recald.bam > N2.discordants.unsorted.bam
+        samtools view -h N2_recald.bam \
+        | ${lumpy_extract_split} -i stdin \
+        | samtools view -Sb - \
+        > N2.splitters.unsorted.bam
+
+        samtools sort N2.discordants.unsorted.bam -O bam -T N2.discordants -o N2.discordants.bam  
+        samtools sort N2.splitters.unsorted.bam -O bam -T N2.splitters -o N2.splitters.bam 
+
+        lumpyexpress \
+        -B N2_recald.bam \
+        -S N2.splitters.bam \
+        -D N2.discordants.bam \
+        -o lumpy_output.vcf
+
+        convert2bed --input=vcf --output=bed <lumpy_output.vcf> lumpy_output.bed
+
+        bedtools window -a indel_positions.bed -b lumpy_output.bed -w 100 > lumpy_window.tsv
+
+        vk vcf2tsv wide --print-header lumpy_output.vcf > lumpy_output.tsv
+
+        """
+
+}
+
+process bcftools_call {
+    
+    echo true
+
+    publishDir "results/${indel}/${size}", mode: 'copy'
+
+    input:
+        set file('indel_positions.bed'), indel, size, file("simulated_genome.fa"), file('simulated_genome.fa.fai'), file('simulated_genome.fa.amb'), file('simulated_genome.fa.ann'), file('simulated_genome.fa.bwt'), file('simulated_genome.fa.pac'), file('simulated_genome.fa.sa'), file('N2.bam'), file('N2.bam.bai'), file('N2_recald.bam'), file('N2_recald.bai'), file('simulated_genome.dict') from gatk_recalibrated_bcftools
+    output:
+        set file('bcftools_output.vcf'), file("bcftools_window.tsv"), file("bcftools_output.tsv") into bcftools_vcf
+
+
+        """
+        echo -e N2 1 > sample_file.ped
+
+        bcftools mpileup --threads ${alignment_cores} -f simulated_genome.fa N2_recald.bam | bcftools call -mv -Ov -o bcftools_output.bcf
+        bcftools convert -Ov -o bcftools_output.vcf bcftools_output.bcf
+
+        convert2bed --input=vcf --output=bed <bcftools_output.vcf> bcftools_output.bed
+
+        bedtools window -a indel_positions.bed -b bcftools_output.bed -w 100 > bcftools_window.tsv
+
+        vk vcf2tsv wide --print-header bcftools_output.vcf > bcftools_output.tsv
+        """
+}
+
